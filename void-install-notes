@@ -1,0 +1,401 @@
+Make sure to boot the installer in uefi mode on newer systems - otherwise grub will fail to install.
+
+(investigate things other than grub)
+-chroot install-
+	login as anon, and create partitions:
+	use fdisk to partition.
+	make an MBR partition table on BIOS, GPT for UEFI. GRUB requires a special partition of ~500mb, vfat, at /boot/efi on uefi systems
+	swap space: create a swap 3x the ram if under 2gb, 2x the ram for 2-8gb and 1.5x ram for greater than 8gb
+        create a separate / and /home. 50gb for /, and add the rest to /home
+	vfat to /efi partition, swap to swap, btrfs the / and /home partitions
+		mkfs.vfat /dev/sda1
+		mkswap /dev/sda2
+		mkfs.btrfs /dev/sda3    (etc)
+        make a directory, and mount them there:
+ 		mkdir /mnt
+		mkdir /mnt/home
+		mkdir /mnt/boot
+ 		mkdir /mnt/boot/efi
+		mount /dev/sda2 /mnt/ #mounts as /
+  		mount /dev/sda1 /mnt/home
+		etc...
+	Install from a rootfs tarball. You may need to install xz to untar first. Connect to wifi to do so.
+		xbps-install xz
+		tar xvf void-x86_64_ROOTFS-20221001.tar.xz -C /mnt
+	Enter the Chroot:
+		xbps-install -S xtools
+		xchroot /mnt /bin/bash
+	Install the base system, and update:
+		xbps-install -Su xbps
+		xbps-install -u
+		xbps-install base-system
+		xbps-remove base-voidstrap
+	Specify the hostname in /etc/hostname
+	Review contents of /etc/rc.conf
+	For Glibc: edit /etc/default/libc-locales uncomment desired locales
+	set a root passwd:
+		passwd
+	generate an fstab from current filesystem:
+		cp /proc/mounts /etc/fstab
+		in /etc/fstab, remove lines that refer to proc, sys, devtmpfs, pts and LIVEOS_ROOTFS
+		Replce references to /dev/sdXX, etc with their UUID. YOu can get this by running blkid
+		change the last zero of the entry for / to 1. And change the last zero of every other line to 2. This changes the behavior of fsck
+		Add an entry to mount /tmp in ram:
+			(in fstab) tmpfs /tmp tmpfs defaults,nosuid,nodev 0 0
+		Add entry for swap:
+			(in fstab) UUID=XXXXXXX swap swap rw,noatime,discard 0 0
+	Install Grub: 
+		Bios:
+			xbps-install -S grub
+			grub-install /dev/sdX (/dev/sdX = drive that you are installing Grub to)
+		UEFI:
+			install grub-x86_64-efi, grub-i386-efi or grub-arm64-efi (depending on architecture)
+			grub-install --target=XXXXXX-efi --efi-directory=/boot/efi --bootloader-id="Void" # Set bootloader ID as you wish
+			Troubleshooting:
+				If EFI variables are not available, add the option --no-nvram to the grub-install command
+				For installing on removable medai, or noncompliant UEFI systems:
+					try adding the option --removable to grub-install
+					OR copy the installed grup executable into a boot directory you create.
+						mkdir -p /boot/efi/EFI/boot
+						cp /boot/efi/EFI/Void/grubx64.efi /boot/efi/EFI/boot/bootx64.efi #Location of grub executable can be found with efibootmgr
+		ensure all installed packages are configure correctly:
+			xbps-reconfigure -fa
+		exit and reboot:
+			exit
+			umount -R /mnt
+			shutdown
+		On reboot, update:
+			xbps-install -Su
+-create new user, add sudo priviledges-
+	useradd -m void
+	passwd void
+	visudo
+		uncomment line that allows all members of wheel group to run any command
+	usermod -aG wheel void
+-to set a static ip-
+	disable the dhcpcd service
+	then add in the /etc/rc.local file:
+		ip link set dev enp34s0 up
+		ip addr add 192.168.1.5/24 brd + dev enp34s0
+		ip route add default via 192.168.1.1
+-set up wireless-
+	most devices use WPA-PSK
+	to add the SSID & password to the wpa_supplicant settings: sudo sh -c 'wpa_passphrase <MYSSID> <passphrase> >> /etc/wpa_supplicant/wpa_supplicant.conf'(need script to automte this, for logging into wifi in hotel, etc)
+	to look for networking cards:
+		run: ip addr
+		results will have multiple options
+		enp9s0 [or similar] = ethernet plug
+		wlp2s0 [or similar] = wireless interface
+	to scan:
+		sudo iw wlp2s0 scan | grep SSID | less
+	commands to start it, if not running:
+		sudo wpa_supplicant -B -i wlp5s0 -c /etc/wpa_supplicant/wpa_supplicant.conf 
+		sudo dhcpcd wlp5s0
+	then enable wpa supplicant and dhcpcd on startup with this, to enable in runit:
+		ln -s /etc/sv/<service> /var/service/
+	if you get an error like this (intel wireless): error snd_hda_intel no codecs found. - it may help to disable unneeded things like bluetooth in bios.
+	if wifi doesn't normally start, just put the commands to start wifi in /etc/rc.local
+-installation- -if you get an error stating Certificate verification failed ERROR: failed to fetch file (XXXXX): Operation not permitted likely the system time is off, and needs to be fixed.-
+		Alternatively, bypass the checks with: export SSL_NO_VERIFY_PEER=1
+	Once connected to the internet, and updated, install: (Try Alsamixer.app, sndio, Pipewire)
+		xz unzip zsh htop firefox-esr mc vim alsa-lib alsa-utils gcc make git wget curl lm_sensors gimp libreoffice zathura Thunderbird keyd mpv most deluge persepolis
+	If you need to create ntfs partitions: 
+		ntfs-3g 
+	If Wayland:
+		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock yambar foot mpvpaper
+	If Xorg (Using Nvidia)
+		urxvt dmenu xorg-minimal xorg-fonts
+	Intel cpu:
+		linux-firmware-intel intel-ucode [nonfree], then regenerate the initramfs. To regenerate initramfs: sudo xbps-reconfigure -f linuxX.XX To find kernel version: sudo xbps-query -l | grep linux		
+	AMD cpu:
+		linux-firmware-amd
+	AMD gpu:
+		Gcn or later AMD gpu:
+			linux-firmware-amd xf86-video-amdgpu
+			Opengl: mesa-dri 
+			Vulkan: vulkan-loader mesa-vulkan-radeon
+			Hardware acceleration: mesa-vaapi mesa-vdpau
+			also possibly:
+				radeontop [a monitoring program]  
+			Note that there are two radeon drivers for vulkan, mesa-vulkan-radeon and amdvlk. mesa-vulkan-radeon is generally better, and amdvlk should usually be avoided, it caused crashes for me. 
+			The proprietary amdgpu-pro drivers should also usually be avoided.
+		Terascale or earlier: (see if improve this section)
+			linux-firmware-amd xf86-video-ati
+			Opengl: mesa-dri 
+			Hardware acceleration: mesa-vaapi mesa-vdpau
+			also possibly:
+				radeontop [a monitoring program]
+	Nvidia gpu: [Nvidia Wayland support is in poor shape at this time]
+		The open source nouveau driver [works very poorly on 2nd gen Maxwell and newer [works okish on 750ti, etc]], only opengl, not suggested on Maxwell and newer architectures:
+			xf86-video-nouveau
+			if needed: mesa-dri-32-bit
+			(look into the nvk driver)
+		Nvidia proprietary drivers:
+			Maxwell architecture and newer:
+				nvidia [nonfree]
+				if needed: nvidia-libs-32bit [nonfree]
+			Kepler architecture:
+				nvidia470 [nonfree]
+				if needed: nvidia470-libs-32bit [nonfree]
+			Fermi architecture:
+				nvidia390 [nonfree]
+				if needed: nvidia390-libs-32bit [nonfree]
+			Tesla architecture and older:
+				not available in repos, it is suggested to use nouveau
+		Enabling Nvidia Optimus [switchable graphics]
+			Prime Render Offload [available on newest nvidia driver only, best option.]
+				First, create an xorg.conf file: Xorg :1 -configure
+				and copy it to X11 conf location: cp /root/xorg.conf.new /etc/X11/xorg.conf
+				In Xorg.conf:
+				Then, under the ServerLayout section, add: Option "AllowNVIDIAGPUScreens"
+				Under the device for the Nvidia GPU, add: Option "AllowEmptyInitialConfiguration"
+				Make a new section named "ServerFlags" with the line: Option "IgnoreABI" "1"
+				Then, you can run commands with prime-run in front of them, to make them use the nvidia card.
+		Monitoring: install nvtop
+	Intel gpu: (add section on monitoring)
+		linux-firmware-intel
+		xf86-video-intel
+		Opengl: mesa-dri
+		Vulkan: vulkan-loader mesa-vulkan-intel
+		Hardware acceleration: intel-video-accel
+			Some issues can be solved by turning iommu off in the kernel cmdline
+	sometimes, pulseaudio is needed, then install:
+		pulseaudio pavucontrol
+	-enabling river-
+		ln -s /etc/sv/seatd /var/service
+		create/place ~/.config/river/init , and make executable
+		put this line in /etc/environment
+			XDG_RUNTIME_DIR=/home/void/.config/1000 (1000 = Uid)
+		create ~/.config/1000, chmod 700 it
+	to setup sensors:
+		sudo sensors-detect, and default for the options, yes to generate config.
+	other repositories:
+		other repositories exist, they can be installed like any other package, they are:
+		void-repo-nonfree
+		void-repo-multilib
+		void-repo-multilib-nonfree
+		void-repo-debug
+	-timezones-
+		to change the default timezone:
+		rm -rf /etc/localtime
+		sudo ln -s /usr/share/zoneinfo/America/Denver /etc/localtime (find your zone in zoneinfo directory)
+	-date- (if you are having problems with resetting, make sure it is correct in bios)
+		set date:
+		date -s '2023-5-1 18:00:00'
+	-default shell to zsh-
+		chsh -s /bin/zsh
+	-wayland setup-
+		(download river config file)
+		enabling dbus service is necessary
+		is elogind needed? or seatd?
+	-steam-
+		install: void-repo-nonfree void-repo-multilib
+		then install: steam libgcc-32bit libstdc++-32bit libdrm-32bit libglvnd-32bit
+		if using open source gpu driver [amd, nouveau], also install: mesa-dri-32bit
+		if nvidia proprietary, install: nvidia-libs-32bit nvidia390-libs-32bit [both latest, update as necessary](why do i have the 390 here?)
+		
+		If some vulkan games (or direct3d, which is translated to vulkan) are not launching, try running steam from the terminal, and see what pops up. 
+			If you get Vulkan errors like "Vulkan missing required extension 'VK_KHR_surface'" and "Blinit unable to initiate Vulkan", try and search for 'vulkan' packages in the void packages, and install stuff. 
+			The reason is that some Vulkan extensions are missing. I'm not sure what packages it was, becuase I tried to uninstall them, and it didn't break? Figure out later.)   
+		In an Nvidia Optimus config, steam must be run with prime-run.
+-alsa-
+	edit [or create] the file /etc/asound.conf
+		if multiple sound sources are not found, this in asound.conf may help. It has caused problems in other cases, not good to add by default.
+			pcm.dsp {
+    				type plug
+    				slave.pcm "dmix"
+			}
+		if old soundcards are removed, they may have entries in /etc/modprobe.d/alsa.conf, which can cause problems. Good idea to remove them if issues.
+-to remove older kernels-
+	sudo vkpurge rm all
+(add modded skyrim section)
+-wine gaming general, wineGE-
+	
+	enabling esync - esync is a thing that removes some overhead and can make games run faster, especially as they are more multithreaded.  guide: https://github.com/lutris/docs/blob/master/HowToEsync.md
+		To check if Esync is enabled -  run the ulimit -Hn command. If the value printed is equal to or greater than 524288, then your system is Esync-compatible.
+		if it is lower, you can fix it by modifying /etc/security/limits.conf change/create this line: username hard nofile 524288    Then reboot. check with ulimit -Hn
+		To start a program with Esync, start the program with WINESYNC=1
+
+	install wine winetricks libwine libwine-32bit protontricks wine-32bit wine-common wine-devel wine-devel-32bit wine-gecko wine-mono wine-tools (see if all of these are necessary)
+
+	install (if nvidia) nvidia nvidia-dkms nvidia-libs linux-firmware-nvidia nvidia-libs-32bit   (see if all of these are necessary)
+	(add amd gpu section)
+
+	it is usually best practice to create a new prefix for each game
+	
+	To set up a prefix:
+		make a descriptive folder, e.g, skyrim-wineGE
+
+		run: WINEPREFIX=/home/username/skyrim-wineGE winecfg
+			the window with wine options should appear, meaning that the wine prefix is set up correctly
+			In the winecfg window, switch from windows 7 to 10 and apply (skyrim tools LOOT requires this, not necessary if doing it with other games probably)
+		run: export WINEPREFIX=/home/username/skyrim-wineGE
+	install dlls:
+		these dlls will be sufficient to run most dx9, dx10, dx11 games, and various skyrim tools, but your mileage may vary.
+		
+		run: WINEPREFIX=/home/username/skyrim-wineGE winetricks --force dotnet20 dotnet48 d3dcompiler_43 d3dcompiler_47 d3dx9 d3dx10 d3dx11_42 d3dx11_43 faudio vcrun2008 vcrun2010 vcrun2012 vcrun2013 vcrun2015 vcrun2019 quartz faudio
+			(you can also run WINEPREFIX=/home/username/skyrim-wineGE winetricks to get a gui to install stuff)
+	install the game:
+		run: WINEPREFIX=/home/username/skyrim-wineGE ./home/username/location-of-wineGE/lutris-GE-Proton7-25-x86_64/bin/wine /location/of/game/install/file.e
+			If it is just a copied skyrim folder, there is no need to do this.
+	install mods:
+		run Mo2 installer: WINEPREFIX=/home/username/skyrim-wineGE /home/username/location-of-wineGE/lutris-GE-Proton7-25-x86_64/bin/wine '/location/of/Mod Organizer 2-6194-2-4-4-1640622655.exe'
+			the default install location should work fine
+			
+		run LOOT installer: WINEPREFIX=/home/username/skyrim-wineGE /home/username/location-of-wineGE/lutris-GE-Proton7-25-x86_64/bin/wine '/location/of/LOOT v0.18.3 - Installer -1918-0-18-3-1653157089.exe'
+			defaults are fine. If LOOT can't find the Skyrim Install, go to file > settings > Skyrim Special Edition > and browse to the install path 
+				OR edit: vim /home/username/location-of-wineGE-prefix/drive_c/users/username/AppData/Local/Loot/settings.toml2, find the Skyrim Special Edition section, and add the path to the game.
+
+		run Wrye Bash installer: WINEPREFIX=/home/usernameskyrim-wineGE /home/username/location-of-wineGE/lutris-GE-Proton7-25-x86_64/bin/wine '/location/of/Wrye Bash 310 - Installer-6837-310-1658670517.exe'
+			Make sure box is checked for SkyrimSE. If it can't detect SkyrimSE, install to an extra location (make sure to check the box next to the extra location path) Then close installer.
+		
+		run Mo2: WINEPREFIX=/home/username/skyrim-wineGE /home/username/location-of-wineGE/lutris-GE-Proton7-25-x86_64/bin/wine /home/void/skyrim-wineGE/drive_c/Modding/MO2/ModOrganizer.exe
+
+		create a new instance - it should see the game automatically - if not, select the 'Skyrim Special Edition' folder manually. I suggest just using a portable instance.
+		I don't install mods through Nexus, I like to keep separate copies as privately stored files, and Nexus connection feature can be buggy, so I suggest not connecting to Nexus.
+		there will be errors in the terminal and the Mo2 Log - these are usually safe to ignore.
+
+		two misrendered black windows pop up. THe first is a tutorial you can follow, say no to the second. (sometimes they are not misrendered)
+
+		To add LOOT to MO2, go to modify executables (looks like gears), add executable, add empty. Title it LOOT. Place the path in binary slot, e.g \home\void\skyrim-wineGE\drive_c\Program Files\LOOT\LOOT.exe 
+			Apply and close. (backslashes are here as Mo2 is windows program, it expects them)
+
+		To add Wrye Bash to MO2, go to modify executables (looks like gears), add executable, add empty. Title it Wrye Bash. Place the path in binary slot, e.g \home\void\TES -Skyrim - Anniversary Edition\Mopy\Wrye Bash.exe 
+			Apply and close. (Wrye Bash install folder is named Mopy, unknown why) (backslashes are here as Mo2 is windows program, it expects them)
+		Finally, to run with mods, make sure you run the cracked steamless launcher from within Mo2. (This didn't work - wine can't launch the patched .exe) (maybe try other emulators, like Smart Steam Emu, steamstub remover)
+			(add section for manual install of SKSE)
+	alternative, running Mo2 through Steam:
+		Make sure Skyrim has run, and set it to use Proton 7.0 (script says to use 6.8. ignore it). No launch commands. Make sure Skyrim isn't running, and run the mo2 install script. (if it errors and talks about xdg-mime, install xdg-utils) 
+			It will install SKSE, and map Mo2 to the play skyrim button in steam.
+			If Skyrim has no sound after doing this, place   WINEDLLOVERIDES="xaudio2_7=n,b" PULSE_LATENCY-MSEC=90 %command%      in the skyrim arguments.
+			If Skyrim shows the Bethesda logo, then blackscreens, check both boxes for both windowed and borderless window in the old launcher (you can add it's path to Mo2, to adjust graphics settings as well)
+
+-ssh- (fix it)
+	make sure openssh is installed
+	enable the sshd service (on machine you will be tunneling into)
+	supposedly, adding: IPQoS lowdelay to ~/.ssh/config can help when it times out for no reason. the default breaks on network, while 'lowdelay' works in some cases. (from voidlinux reddit, search for ssh)	
+(add section on changing shell to zsh)
+(get cli music player - moc looks good)	
+(see about getting an email client)(thunderbird, cmd email clients)
+(investigate if an IRC is needed)
+(add section on time and date control)
+(add section on changing mirrors)
+(add section on video players, etc)
+(add section on image viewers, etc)
+(look into replacing sudo with doas)
+(add modded minecraft section)
+(add modded factorio section)
+	add "padsp" in front of factorio if it isn't working with pulseaudio
+(see if trim is a good idea for ssds)
+(figure out how to fix usb owned by root)
+(look into sleep and resume on laptops)
+(look into lockscreens, for security)
+(look into wpa_supplicant vs connman)
+(add section on printers, cups, etc)
+(add xbps-src section)
+(look at leaking dns servers)
+(add section about enabling runit services)
+(add section about compiling kernel)
+	install ncurses devel flex
+(add firefox/librewolf  section)
+	accessibility off is good - supposed to be a memory leak
+-xdeb- (add section on using xdeb to convert .deb to xbps packages)
+-to install and compile dwm- (look at doing with xbps-src) (for xorg only)
+	install: libXinerama-devel libXft-devel
+	then download dwm: wget https://dl.suckless.org/dwm/dwm-6.4.tar.gz
+	once unpacked into a different folder, change in config.def.h:
+		int showbar to 0
+		cyan color to #440000
+		remove the firefox rules line
+		change Mod1Mask to Mod4Mask
+		change dmenu spawn from XK_p to XK_d, and incmaster to XK_p from XK_d
+		remove shiftmask from spwan terminal, add to zoom
+	Then run: sudo make clean install
+	create the file .xinitrc in /home/<username>/. Contents: exec dwm
+	run with startx
+	after this, the packages installed can be removed.
+-mc-
+	change skin to gotar
+	hide menubar
+	hide hintbar
+-zram- (what algorithm is best?) (is one per core best?) # smaller size 80% of Ram, so incompressible data does not cause a blowup
+	sudo sh -c 'echo "zram" > /etc/modules-load.d/zram.conf'
+
+	Most people recommend creating one disk per processor core. This is specified as an option when the kernel module is loaded, here's an example for a 4 core system:
+
+	sudo sh -c 'echo "options zram num_devices=4" > /etc/modprobe.d/zram.conf'
+
+	Now that the number of disks has been set, we must also specify their size. This could be done in /etc/runit/core-services/03-zram.sh or in /etc/rc.local. Add the following lines to either file, adjusted to however many disks you created earlier. The size you select also depends on your system needs and available RAM. This example adds 4GB zram swap to a system.
+
+	# set sizes for zram drives
+	zramctl --find --size 1G
+	zramctl --find --size 1G
+	zramctl --find --size 1G
+	zramctl --find --size 1G
+
+	# make it swap
+	mkswap /dev/zram0
+	mkswap /dev/zram1
+	mkswap /dev/zram2
+	mkswap /dev/zram3
+
+	# activate
+	swapon /dev/zram0
+	swapon /dev/zram1
+	swapon /dev/zram2
+	swapon /dev/zram3
+
+-disabling unneeded services-
+	to disable unneeded services, just remove the symlink in /var/service
+	Examples of uneeded services on a new system:
+		agetty-tty3 -through- agetty-tty6 [tty2 is kept as backup]
+		dhcpcd [if you have a static ip set]
+		sshd [if you are not using ssh on the computer]
+-adding custom repository-
+	(add section on this)
+	to add packages to a custom repo, use sudo xbps-rindex -a /path/to/package/pck.xbps
+-install dwarf fortress- [add section on dfhack, stonesense, etc]
+	install: SDL gtk+ SDL_image SDL_ttf glu
+		if sound is desired: libopenal	
+	If an error stating something like "version 'CXXABI_1/3/8' not found" pops up, try to remove libstdc++.so.6 and libgcc_s.so.1 from the DF libs folder. 
+		This causes DF to fall back to system versions of these libs, which are usually newer.
+-Discord-
+	install libatomic
+	The app seems to work, but it only detects microphone after something [youtube video] is opened in FireFox (figure out how to fix this)
+		turn minimize to tray and open discord off in Linux Settings
+		turn Hardware acceleration off advanced settings (see if this is still needed)
+-Mullvad-
+	using the mullvad app doesn't seem to work well through xdeb, just use a config file and wireguard.
+	1. install wireguard
+	2. use the mullvad config generator page (look at doing through cli), and download the configs, and place them in /etc/wireguard
+	3. to turn it on [example]: wg-quick up mullvad-se4 [the se4 part is different, depending on location] [place this command somewhere where it will be executed on startup]
+	to disconnect: wg-quick down mullvad-se4
+-gpu overclocking - amd gcn and later-
+	the third party guis seem quite buggy, just use cli
+
+	enable amdgpu.ppfeaturemask=0xffffffff in grub boot parameters
+		add it in the quotes of this line: GRUB_CMDLINE_LINUX_DEFAULT
+		then run: sudo update grub
+
+	You then need to find the file that contains this. Run: readlink -f /sys/class/drm/card0/device.
+	find a file named pp_od_clk_voltage It's path will be something like /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0
+	the file for the powercap is named power1_cap and it's path looks like: /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/hwmon/hwmon1
+
+	Now make a script and place it somewhere with startup stuff
+	it contains commands to set the clocks and volts for mem and core, and the power limit
+	example:
+	#!/bin/sh
+	#sets clock to 1450mhz and voltage to 1150mv for powerstate seven [look at the file for how many powerstates]
+	sudo sh -c "echo 's 7 1450 1150' > /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/pp_od_clk_voltage"
+	#sets memclock and volts to 2065 and 950 for mem powerstate 2
+	sudo sh -c "echo 'm 2 2065 950' > /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/pp_od_clk_voltage"
+	# sets powerlimit to 120 watts
+	sudo sh -c "echo 120000000 > /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/hwmon/hwmon1/power1_cap"
+	#applies the settings to the gpu
+	sudo sh -c "echo 'c' > /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/pp_od_clk_voltage"
+
+	WARNING: DOUBLE CHECK THE VALUES ARE CORRECT. Run the script without the last command, then take a look at the files to make sure settings look good.
+	remember to chmod +x the script
+
+	finally, add a command /path/to/script.sh to rc.local to run it on startup. (figure out how to put it in .xinitrc instead, so stability on login line is not affected)
+
