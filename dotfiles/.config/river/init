@@ -1,0 +1,102 @@
+#!/bin/sh
+#See the river(1), riverctl(1), and rivertile(1) man pages for complete documentation.
+#Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
+riverctl map normal Super D spawn fuzzel #Launcher
+riverctl map normal Super F spawn foot #Terminal ?STARTING TERMINAL FLOATING ABOVE REST--TRY IT?
+
+riverctl map normal Super+Shift C close
+riverctl map normal Super+Shift Q exit #Exit back to tty
+
+riverctl map normal Super J focus-view next #Focus next view ?WHAT IS DIFFERENCE BETWEEN focus-view AND swap?
+riverctl map normal Super K focus-view previous #Focus previos view
+riverctl map normal Super+Shift J swap next #Focus next view
+riverctl map normal Super+Shift K swap previous #Focus previous view
+
+riverctl map normal Super Period focus-output next #Focus next output
+riverctl map normal Super Comma focus-output previous #Focus previous output
+
+riverctl map normal Super+Shift Period send-to-output next #Send focused view to next output
+riverctl map normal Super+Shift Comma send-to-output previous #Send focused view to previous output
+
+riverctl map normal Super Return zoom #Bump the focused view to the top of the layout stack
+
+riverctl map normal Super H send-layout-cmd rivertile "main-ratio -0.05" #Decrease/Increase main ratio rivertile
+riverctl map normal Super L send-layout-cmd rivertile "main-ratio +0.05" #^
+
+riverctl map normal Super+Shift H send-layout-cmd rivertile "main-count +1" #Increment/decrement main count of rivertile
+riverctl map normal Super+Shift L send-layout-cmd rivertile "main-count -1" #^
+
+riverctl map normal Super+Alt H move left 100 #Move view
+riverctl map normal Super+Alt J move down 100 #^
+riverctl map normal Super+Alt K move up 100 #^
+riverctl map normal Super+Alt L move right 100 #^
+
+riverctl map normal Super+Alt+Control H snap left #Snap view to screen edge
+riverctl map normal Super+Alt+Control J snap down #^
+riverctl map normal Super+Alt+Control K snap up #^
+riverctl map normal Super+Alt+Control L snap right #^
+
+riverctl map normal Super+Alt+Shift H resize horizontal -100
+riverctl map normal Super+Alt+Shift J resize vertical 100
+riverctl map normal Super+Alt+Shift K resize vertical -100
+riverctl map normal Super+Alt+Shift L resize horizontal 100
+
+riverctl map-pointer normal Super BTN_LEFT move-view #BTN_LEFT=left mouse button
+riverctl map-pointer normal Super BTN_RIGHT resize-view #BTN_RIGHT=right mouse button
+riverctl map-pointer normal Super BTN_MIDDLE toggle-float #BTN_MIDDLE=middle mouse button
+
+for i in $(seq 1 9) #Sets the nine different tags
+do
+    tags=$((1 << ($i - 1)))
+    riverctl map normal Super $i set-focused-tags $tags #Focus on tag 0-8
+    riverctl map normal Super+Shift $i set-view-tags $tags #Assign focused view to tag
+    riverctl map normal Super+Control $i toggle-focused-tags $tags #Toggle which tag is focused
+    riverctl map normal Super+Shift+Control $i toggle-view-tags $tags #Toggle tag of focused view
+done
+
+all_tags=$(((1 << 32) - 1))
+riverctl map normal Super 0 set-focused-tags $all_tags
+riverctl map normal Super+Shift 0 set-view-tags $all_tags #Tag focused view with all tags
+
+riverctl map normal Super Space toggle-float
+
+riverctl map normal Super S toggle-fullscreen
+
+riverctl map normal Super Up    send-layout-cmd rivertile "main-location top" #Super+{Up,Right,Down,Left} to change layout orientation
+riverctl map normal Super Right send-layout-cmd rivertile "main-location right" #^
+riverctl map normal Super Down  send-layout-cmd rivertile "main-location bottom" #^
+riverctl map normal Super Left  send-layout-cmd rivertile "main-location left" #^
+
+riverctl declare-mode passthrough #Passthrough mode which has a single mapping to return to normal mode. Useful for testing a nested wayland compositor
+riverctl map normal Super F11 enter-mode passthrough #^
+riverctl map passthrough Super F11 enter-mode normal #^
+
+for mode in normal locked #Various media key mapping examples for both normal and locked mode which have no modifier
+do
+    riverctl map $mode None XF86Eject spawn 'eject -T' #Eject the optical drive
+
+    riverctl map $mode None XF86AudioRaiseVolume  spawn 'pamixer -i 5' #Control pulse audio volume with pamixer (https://github.com/cdemoulins/pamixer)
+    riverctl map $mode None XF86AudioLowerVolume  spawn 'pamixer -d 5' #^
+    riverctl map $mode None XF86AudioMute         spawn 'pamixer --toggle-mute' #^
+
+    riverctl map $mode None XF86AudioMedia spawn 'playerctl play-pause' #Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
+    riverctl map $mode None XF86AudioPlay  spawn 'playerctl play-pause' #^
+    riverctl map $mode None XF86AudioPrev  spawn 'playerctl previous' #^
+    riverctl map $mode None XF86AudioNext  spawn 'playerctl next' #^
+
+    riverctl map $mode None XF86MonBrightnessUp   spawn 'light -A 5' #Control screen backlight brightness with light (https://github.com/haikarainen/light)
+    riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5' #^
+done
+
+riverctl background-color 0x010b06
+riverctl border-color-focused 0x630101
+riverctl border-color-unfocused 0x01357b
+
+riverctl set-repeat 50 300 #keyboard repeat rate ?WHAT DOES THIS DO?
+
+riverctl rule-add float -app-id 'float*' -title 'foo' #Any view with app-id="float" and title="foo" start floating
+
+riverctl rule-add csd -app-id "bar" #Any view with app-id "bar" and any title use client side decorations
+
+riverctl default-layout rivertile
+rivertile -view-padding 0 -outer-padding 0 &

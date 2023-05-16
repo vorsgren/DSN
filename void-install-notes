@@ -315,7 +315,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	run with startx
 	after this, the packages installed can be removed.
 -mc-
-	change skin to gotar
+	change skin to modarcon16-defbg (modarcon16root-defbg for root)
 	hide menubar
 	hide hintbar
 -zram- (what algorithm is best?) (is one per core best?) # smaller size 80% of Ram, so incompressible data does not cause a blowup
