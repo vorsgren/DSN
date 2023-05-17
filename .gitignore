@@ -1,0 +1,7 @@
+#ignore all logs
+*.log
+#all vim editing files
+*.swp
+#all files with .tmp or .temp
+*.tmp
+*.temp
