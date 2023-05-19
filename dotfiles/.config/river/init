@@ -89,8 +89,8 @@ do
 done
 
 riverctl background-color 0x010b06
-riverctl border-color-focused 0x630101
-riverctl border-color-unfocused 0x01357b
+riverctl border-color-focused 0x230101
+riverctl border-color-unfocused 0x01200b
 
 riverctl set-repeat 50 300 #keyboard repeat rate ?WHAT DOES THIS DO?
 
