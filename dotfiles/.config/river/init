@@ -88,6 +88,8 @@ do
     riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5' #^
 done
 
+riverctl spawn Waybar
+
 riverctl background-color 0x010b06
 riverctl border-color-focused 0x230101
 riverctl border-color-unfocused 0x01200b
