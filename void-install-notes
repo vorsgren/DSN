@@ -98,7 +98,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 -installation- -if you get an error stating Certificate verification failed ERROR: failed to fetch file (XXXXX): Operation not permitted likely the system time is off, and needs to be fixed.-
 		Alternatively, bypass the checks with: export SSL_NO_VERIFY_PEER=1
 	Once connected to the internet, and updated, install: (Try Alsamixer.app, sndio, Pipewire)
-		xz unzip zsh htop firefox-esr mc vim alsa-lib alsa-utils gcc make git wget curl lm_sensors gimp libreoffice zathura Thunderbird keyd mpv most deluge persepolis
+		xz unzip zsh htop firefox-esr mc vim alsa-lib alsa-utils gcc make git wget curl lm_sensors gimp libreoffice zathura Thunderbird keyd mpv most deluge persepolis obs newsboat
 	If you need to create ntfs partitions: 
 		ntfs-3g 
 	If Wayland:
@@ -275,6 +275,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	enable the sshd service (on machine you will be tunneling into)
 	supposedly, adding: IPQoS lowdelay to ~/.ssh/config can help when it times out for no reason. the default breaks on network, while 'lowdelay' works in some cases. (from voidlinux reddit, search for ssh)	
 (add section on changing shell to zsh)
+yambar should show in a blank screen and automatically hide when you open a window, and automatically unhide when all windows are closed. There should also be a shortvut to show yambar when windows are open.
 (get cli music player - moc looks good)	
 (see about getting an email client)(thunderbird, cmd email clients)
 (investigate if an IRC is needed)
