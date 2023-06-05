@@ -1,13 +1,15 @@
 {
+    "bar_id": "bar-0",
+    "ipc": true,
     // "layer": "top", // Waybar at top layer
     // "position": "bottom", // Waybar position (top|bottom|left|right)
-    "height": 15, // Waybar height (to be removed for auto height)
+    "height": 22, // Waybar height (to be removed for auto height)
     // "width": 1280, // Waybar width
-    "spacing": 1, // Gaps between modules (4px)
+    "spacing": 2, // Gaps between modules (4px)
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad"],
-    "modules-center": ["sway/window"],
-    "modules-right": ["network", "cpu", "memory", "keyboard-state", "battery", "battery#bat2", "tray"],
+    "modules-left": ["river/tags"],
+    "modules-center": ["tray"],
+    "modules-right": ["network", "cpu", "memory"],
     "keyboard-state": {
         "numlock": true,
         "capslock": true,
@@ -18,14 +20,11 @@
         }
     },
     "tray": {
-        // "icon-size": 15,
+        "icon-size": 15,
         "spacing": 10
     },
     "river/tags": {
 	"num-tags": 9
-    },
-    "river/window": {
-	"format": "{}"
     },
     "cpu": {
         "format": "{usage}% cpu",
@@ -33,20 +32,6 @@
     },
     "memory": {
         "format": "{}% mem"
-    },
-    "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% nobat",
-        "format-plugged": "{capacity}% nobat",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
     },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
@@ -56,37 +41,6 @@
         "format-linked": "{ifname} (No IP)",
         "format-disconnected": "Disconnected ⚠",
         "format-alt": "{ifname}: {ipaddr}/{cidr}"
-    },
-    "pulseaudio": {
-        // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
-        "format-icons": {
-            "headphone": "headphone",
-            "hands-free": "handsfree",
-            "headset": "headset",
-            "phone": "phone",
-            "portable": "portable",
-            "car": "car",
-            "default": ["o", "o", "o"]
-        },
-        "on-click": "pavucontrol"
-    },
-    "custom/media": {
-        "format": "{icon} {}",
-        "return-type": "json",
-        "max-length": 40,
-        "format-icons": {
-            "spotify": "no media",
-            "default": "🎜"
-        },
-        "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     }
 }
 

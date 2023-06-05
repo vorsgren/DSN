@@ -4,6 +4,8 @@
 riverctl map normal Super D spawn fuzzel #Launcher
 riverctl map normal Super F spawn foot #Terminal ?STARTING TERMINAL FLOATING ABOVE REST--TRY IT?
 
+riverctl map normal Super B spawn 'kill -USR1 $(pgrep waybar)' #Toggle statusbar
+
 riverctl map normal Super+Shift C close
 riverctl map normal Super+Shift Q exit #Exit back to tty
 
@@ -88,7 +90,7 @@ do
     riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5' #^
 done
 
-riverctl spawn Waybar
+riverctl spawn waybar
 
 riverctl background-color 0x010b06
 riverctl border-color-focused 0x230101

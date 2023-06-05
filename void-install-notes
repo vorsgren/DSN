@@ -102,7 +102,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	If you need to create ntfs partitions: 
 		ntfs-3g 
 	If Wayland:
-		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock waybar foot mpvpaper
+		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock waybar foot mpvpaper swayidle
 	If Xorg (Using Nvidia)
 		urxvt dmenu xorg-minimal xorg-fonts
 	Intel cpu:

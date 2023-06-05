@@ -1,0 +1,7 @@
+Format hovering message for network, etc on waybar
+
+make waybar hide automatically when you open something
+
+make dotfiles symlinked
+
+change some river tags to be for browser, file manager, etc - and configure stuff to automatically open in these views
