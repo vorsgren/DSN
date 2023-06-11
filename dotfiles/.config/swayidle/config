@@ -1,0 +1,5 @@
+swayidle -w \
+	timeout 300 'swaylock -f -u -c 050505' \
+	timeout 600 'riverctl spawn wlopm --off eDP-1' \
+		resume 'riverctl spawn wlopm --on eDP-1' \
+	before-sleep 'swaylock -f -u -c 050505'

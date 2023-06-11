@@ -100,11 +100,11 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	Once connected to the internet, and updated, install: (Try Alsamixer.app, sndio, Pipewire)
 		xz unzip zsh htop firefox-esr mc vim alsa-lib alsa-utils gcc make git wget curl lm_sensors gimp libreoffice zathura Thunderbird keyd mpv most deluge persepolis obs newsboat vagrant task
 	If you need to create ntfs partitions: 
-		ntfs-3g 
+		ntfs-3g
 	If Wayland:
-		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock waybar foot mpvpaper swayidle
+		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock waybar foot mpvpaper swayidle wlopm wcalc
 	If Xorg (Using Nvidia)
-		urxvt dmenu xorg-minimal xorg-fonts
+		urxvt dmenu xorg-minimal xorg-fonts wcalc
 	Intel cpu:
 		linux-firmware-intel intel-ucode [nonfree], then regenerate the initramfs. To regenerate initramfs: sudo xbps-reconfigure -f linuxX.XX To find kernel version: sudo xbps-query -l | grep linux		
 	AMD cpu:
