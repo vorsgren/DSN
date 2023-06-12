@@ -1,0 +1,21 @@
+Format hovering message for network, etc on waybar
+
+make waybar hide automatically when you open something
+
+make dotfiles symlinked
+
+change some river tags to be for browser, file manager, etc - and configure stuff to automatically open in these views
+
+foot in daemon mode
+
+Add osc52 to vim
+
+add any other vim customizations
+
+customize mpvpaper
+
+set browser to download to ~/dwn
+
+customize firefox
+
+Set up Mako (or other notification daemon)

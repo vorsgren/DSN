@@ -2,7 +2,12 @@
 #See the river(1), riverctl(1), and rivertile(1) man pages for complete documentation.
 #Note: the "Super" modifier is also known as Logo, GUI, Windows, Mod4, etc.
 riverctl map normal Super D spawn fuzzel #Launcher
-riverctl map normal Super F spawn foot #Terminal ?STARTING TERMINAL FLOATING ABOVE REST--TRY IT?
+riverctl map normal Super F spawn foot #Terminal
+#riverctl map normal Super+Shift F spawn /home/void/.config/river/scratchpad.sh  #Terminal floating
+
+riverctl map normal Super B spawn 'kill -USR1 $(pgrep waybar)' #Toggle statusbar
+
+riverctl map normal Super+Shift O spawn 'swaylock -u -c 050505' #Lock the screen
 
 riverctl map normal Super+Shift C close
 riverctl map normal Super+Shift Q exit #Exit back to tty
@@ -88,15 +93,19 @@ do
     riverctl map $mode None XF86MonBrightnessDown spawn 'light -U 5' #^
 done
 
+riverctl spawn waybar
+
+riverctl spawn /home/void/.config/river/idle.sh
+
 riverctl background-color 0x010b06
 riverctl border-color-focused 0x230101
 riverctl border-color-unfocused 0x01200b
 
 riverctl set-repeat 50 300 #keyboard repeat rate ?WHAT DOES THIS DO?
 
-riverctl rule-add float -app-id 'float*' -title 'foo' #Any view with app-id="float" and title="foo" start floating
+riverctl rule-add float -app-id 'foot' -title 'foo' #Any view with app-id="float" and title="foo" start floating
 
-riverctl rule-add csd -app-id "bar" #Any view with app-id "bar" and any title use client side decorations
+#riverctl rule-add csd -app-id "bar" #Any view with app-id "bar" and any title use client side decorations
 
 riverctl default-layout rivertile
 rivertile -view-padding 0 -outer-padding 0 &
