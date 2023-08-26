@@ -11,20 +11,20 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 		mkfs.vfat /dev/sda1
 		mkswap /dev/sda2
 		mkfs.btrfs /dev/sda3    (etc)
-        make a directory, and mount them there:
- 		mkdir /mnt
-		mkdir /mnt/home
-		mkdir /mnt/boot
- 		mkdir /mnt/boot/efi
-		mount /dev/sda2 /mnt/ #mounts as /
-  		mount /dev/sda1 /mnt/home
+        make sub-directories in /mnt, and mount them there:
+		sudo mount /dev/sda3 /mnt/		#mounts as /
+		sudo mkdir /mnt/home
+  		sudo mount /dev/sda4 /mnt/home
+		sudo mkdir /mnt/boot
+ 		sudo mkdir /mnt/boot/efi
+  		sudo mount /dev/sda1 /mnt/boot/efi
 		etc...
 	Install from a rootfs tarball. You may need to install xz to untar first. Connect to wifi to do so.
 		xbps-install xz
-		tar xvf void-x86_64_ROOTFS-20221001.tar.xz -C /mnt
-	Enter the Chroot:
+		sudo tar xvf void-x86_64-ROOTFS-20230628.tar.xz -C /mnt
+	Enter the Chroot:
 		xbps-install -S xtools
-		xchroot /mnt /bin/bash
+		sudo xchroot /mnt /bin/bash
 	Install the base system, and update:
 		xbps-install -Su xbps
 		xbps-install -u
@@ -38,7 +38,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	generate an fstab from current filesystem:
 		cp /proc/mounts /etc/fstab
 		in /etc/fstab, remove lines that refer to proc, sys, devtmpfs, pts and LIVEOS_ROOTFS
-		Replce references to /dev/sdXX, etc with their UUID. YOu can get this by running blkid
+		Replce references to /dev/sdXX, etc with their UUID. You can get this by running blkid
 		change the last zero of the entry for / to 1. And change the last zero of every other line to 2. This changes the behavior of fsck
 		Add an entry to mount /tmp in ram:
 			(in fstab) tmpfs /tmp tmpfs defaults,nosuid,nodev 0 0
@@ -49,21 +49,23 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 			xbps-install -S grub
 			grub-install /dev/sdX (/dev/sdX = drive that you are installing Grub to)
 		UEFI:
-			install grub-x86_64-efi, grub-i386-efi or grub-arm64-efi (depending on architecture)
-			grub-install --target=XXXXXX-efi --efi-directory=/boot/efi --bootloader-id="Void" # Set bootloader ID as you wish
+			xbps-install grub-x86_64-efi, grub-i386-efi or grub-arm64-efi (depending on architecture)
+			grub-install --target=XXXXXX-efi --efi-directory=/boot/efi --bootloader-id="Void" # Set bootloader ID as you wish. for target=, set to architecture. i.e target=x86_64-efi
 			Troubleshooting:
 				If EFI variables are not available, add the option --no-nvram to the grub-install command
-				For installing on removable medai, or noncompliant UEFI systems:
+				For installing on removable media, or noncompliant UEFI systems:
 					try adding the option --removable to grub-install
 					OR copy the installed grup executable into a boot directory you create.
 						mkdir -p /boot/efi/EFI/boot
 						cp /boot/efi/EFI/Void/grubx64.efi /boot/efi/EFI/boot/bootx64.efi #Location of grub executable can be found with efibootmgr
 		ensure all installed packages are configure correctly:
 			xbps-reconfigure -fa
-		exit and reboot:
+		exit the chroot:
 			exit
-			umount -R /mnt
-			shutdown
+		copy /etc/wpa_supplicant/wpa_supplicant.conf to /mnt/etc/wpa_supplicant/wpa_supplicant.conf This makes it so you do not ave to reconfigure your wifi on reboot into newly installed system
+		unmount chroot, shutdown:
+			sudo umount -R /mnt
+			sudo poweroff
 		On reboot, update:
 			xbps-install -Su
 -create new user, add sudo priviledges-
@@ -102,7 +104,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	If you need to create ntfs partitions: 
 		ntfs-3g
 	If Wayland:
-		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock waybar foot mpvpaper swayidle wlopm wcalc
+		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock Waybar foot mpvpaper swayidle wlopm wcalc polkit qt5-wayland
 	If Xorg (Using Nvidia)
 		urxvt dmenu xorg-minimal xorg-fonts wcalc
 	Intel cpu:
@@ -112,7 +114,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	AMD gpu:
 		Gcn or later AMD gpu:
 			linux-firmware-amd xf86-video-amdgpu
-			Opengl: mesa-dri 
+			Opengl: mesa-dri
 			Vulkan: vulkan-loader mesa-vulkan-radeon
 			Hardware acceleration: mesa-vaapi mesa-vdpau
 			also possibly:
@@ -158,15 +160,20 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 		Opengl: mesa-dri
 		Vulkan: vulkan-loader mesa-vulkan-intel
 		Hardware acceleration: intel-video-accel
-			Some issues can be solved by turning iommu off in the kernel cmdline
+			Some issues can be solved by turning iommu off in the kernel cmdline
 	sometimes, pulseaudio is needed, then install:
 		pulseaudio pavucontrol
 	-enabling river-
+		(download river config file, place in ~/.config)
+		enabling dbus and polkit seems necessary
+		add the user to the _seatd group
+			sudo usermod -a -G _seatd void
+		seatd or elogind is needed, seatd seems better
 		ln -s /etc/sv/seatd /var/service
 		create/place ~/.config/river/init , and make executable
 		put this line in /etc/environment
-			XDG_RUNTIME_DIR=/home/void/.config/1000 (1000 = Uid)
-		create ~/.config/1000, chmod 700 it
+			XDG_RUNTIME_DIR='/home/void/.config/1000'
+		create the directory ~/.config/1000, chmod 0700 it
 	to setup sensors:
 		sudo sensors-detect, and default for the options, yes to generate config.
 	other repositories:
@@ -184,10 +191,6 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 		date -s '2023-5-1 18:00:00'
 	-default shell to zsh-
 		chsh -s /bin/zsh
-	-wayland setup-
-		(download river config file)
-		enabling dbus service is necessary
-		is elogind needed? or seatd?
 	-steam-
 		install: void-repo-nonfree void-repo-multilib
 		then install: steam libgcc-32bit libstdc++-32bit libdrm-32bit libglvnd-32bit
