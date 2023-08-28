@@ -19,3 +19,5 @@ set browser to download to ~/dwn
 customize firefox
 
 Set up Mako (or other notification daemon)
+
+Look into physlock - that way it locks at the tty level as well. Can you give physlock a blank screen like swaylock?
