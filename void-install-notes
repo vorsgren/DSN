@@ -191,8 +191,8 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	-steam-
 		install: void-repo-nonfree void-repo-multilib
 		then install: steam libgcc-32bit libstdc++-32bit libdrm-32bit libglvnd-32bit
-		if using open source gpu driver [amd, nouveau], also install: mesa-dri-32bit
-		if nvidia proprietary, install: nvidia-libs-32bit nvidia390-libs-32bit [both latest, update as necessary](why do i have the 390 here?)
+		if using open source gpu driver [amd, intel, nouveau], also install: mesa-dri-32bit
+		if nvidia proprietary, install: nvidia-libs-32bit (or whichever nvidia libs is appropriate)
 		
 		If some vulkan games (or direct3d, which is translated to vulkan) are not launching, try running steam from the terminal, and see what pops up. 
 			If you get Vulkan errors like "Vulkan missing required extension 'VK_KHR_surface'" and "Blinit unable to initiate Vulkan", try and search for 'vulkan' packages in the void packages, and install stuff. 
@@ -208,7 +208,6 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 		if old soundcards are removed, they may have entries in /etc/modprobe.d/alsa.conf, which can cause problems. Good idea to remove them if issues.
 -to remove older kernels-
 	sudo vkpurge rm all
-(add modded skyrim section)
 -wine gaming general, wineGE-
 	
 	enabling esync - esync is a thing that removes some overhead and can make games run faster, especially as they are more multithreaded.  guide: https://github.com/lutris/docs/blob/master/HowToEsync.md
