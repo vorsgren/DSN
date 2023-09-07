@@ -16,8 +16,14 @@ customize mpvpaper
 
 set browser to download to ~/dwn
 
-customize firefox
+customize firefox (or just use librewolf)
 
 Set up Mako (or other notification daemon)
 
-Look into physlock - that way it locks at the tty level as well. Can you give physlock a blank screen like swaylock?
+Look at doing everything as a source based distro
+
+add battery to bar
+
+add zram to bar
+
+add swap to bar
