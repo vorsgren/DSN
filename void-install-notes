@@ -154,12 +154,13 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 				Make a new section named "ServerFlags" with the line: Option "IgnoreABI" "1"
 				Then, you can run commands with prime-run in front of them, to make them use the nvidia card.
 		Monitoring: install nvtop
-	Intel gpu: (add section on monitoring)
+	Intel gpu:
 		linux-firmware-intel
 		xf86-video-intel
 		Opengl: mesa-dri
 		Vulkan: vulkan-loader mesa-vulkan-intel
 		Hardware acceleration: intel-video-accel
+		Monitoring: intel-gpu-tools run with sudo intel_gpu_top
 			Some issues can be solved by turning iommu off in the kernel cmdline
 	sometimes, pulseaudio is needed, then install:
 		pulseaudio pavucontrol
@@ -192,7 +193,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	-default shell to zsh-
 		chsh -s /bin/zsh
 	-steam-
-		install: void-repo-nonfree void-repo-multilib
+		install: void-repo-nonfree void-repo-multilib/nonfree
 		then install: steam libgcc-32bit libstdc++-32bit libdrm-32bit libglvnd-32bit
 		if using open source gpu driver [amd, nouveau], also install: mesa-dri-32bit
 		if nvidia proprietary, install: nvidia-libs-32bit nvidia390-libs-32bit [both latest, update as necessary](why do i have the 390 here?)
@@ -327,29 +328,38 @@ waybar should show in a blank screen and automatically hide when you open a wind
 -zram- (what algorithm is best?) (is one per core best?) # smaller size 80% of Ram, so incompressible data does not cause a blowup
 	sudo sh -c 'echo "zram" > /etc/modules-load.d/zram.conf'
 
-	Most people recommend creating one disk per processor core. This is specified as an option when the kernel module is loaded, here's an example for a 4 core system:
+	This is specified as an option when the kernel module is loaded, here's an example for a 12gb ram system system:
 
-	sudo sh -c 'echo "options zram num_devices=4" > /etc/modprobe.d/zram.conf'
+	sudo sh -c 'echo "options zram num_devices=1" > /etc/modprobe.d/zram.conf'
 
-	Now that the number of disks has been set, we must also specify their size. This could be done in /etc/runit/core-services/03-zram.sh or in /etc/rc.local. Add the following lines to either file, adjusted to however many disks you created earlier. The size you select also depends on your system needs and available RAM. This example adds 4GB zram swap to a system.
+	Now that the number of disks has been set, we must also specify their size. This could be done in /etc/runit/core-services/03-zram.sh or in /etc/rc.local. Add the following lines to either file, adjusted to however many disks you created earlier. The size you select also depends on your system needs and available RAM. This example adds 18GB zram swap to a system. algo should usualy be zstd, but lzo-le can be used for weaker cpu and faster compression at a worse ratio, for example in a game server.
 
 	# set sizes for zram drives
-	zramctl --find --size 1G
-	zramctl --find --size 1G
-	zramctl --find --size 1G
-	zramctl --find --size 1G
+	zramctl --find --algorithm zstd --size 18G 
 
 	# make it swap
 	mkswap /dev/zram0
-	mkswap /dev/zram1
-	mkswap /dev/zram2
-	mkswap /dev/zram3
 
 	# activate
 	swapon /dev/zram0
-	swapon /dev/zram1
-	swapon /dev/zram2
-	swapon /dev/zram3
+
+	Then, place these lines in /etc/sysctl.conf:
+		vm.swappiness=200 # max swappiness, so zram is used often in case of need
+
+	If you have a decent amount of ram, add these lines to /etc/sysctl.conf as well:
+		vm.vfs_cache_pressure=50 # low cache pressure - kernel will cache more stuff in ample ram
+		vm.dirty_background_ratio=50 # waits to write it out, increases throughput and performance.
+		vm.dirty_ratio=80 # wait until 80% of ram has dirty pages. increases throughput
+		
+	If you are on a particularily ram starved system, place these in /etc/sysctl.conf as well:
+		vm.vfs_cache_pressure=500 # increases cache pressure, so kernel does not try to cache stuff.
+		vm.dirty_background_ratio=5 # writes dirty pages out of ram to disk right away.
+		vm.dirty_ratio=10 # If dirty pages get to 10% write them out right away
+
+	If you have a regular swap in addition to zram, ensure priority is set higher for the zram device:
+		sudo cat /proc/swaps
+		ensure that the default swap partition and the zram device is present, and that the zram device has a higher priority.
+	Note that htop has a bar to show zram usage
 
 -disabling unneeded services-
 	to disable unneeded services, just remove the symlink in /var/service
