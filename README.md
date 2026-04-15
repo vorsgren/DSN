@@ -24,4 +24,10 @@ configure zswap
 
 add bar with status monitor
 
+add chroot setup script
+
+add script for music player, etc.
+
+add script to run on first boot, adding all files, etc
+
 Likely much much more
