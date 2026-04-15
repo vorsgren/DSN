@@ -11,20 +11,20 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 		mkfs.vfat /dev/sda1
 		mkswap /dev/sda2
 		mkfs.btrfs /dev/sda3    (etc)
-        make a directory, and mount them there:
- 		mkdir /mnt
-		mkdir /mnt/home
-		mkdir /mnt/boot
- 		mkdir /mnt/boot/efi
-		mount /dev/sda2 /mnt/ #mounts as /
-  		mount /dev/sda1 /mnt/home
+        make sub-directories in /mnt, and mount them there:
+		sudo mount /dev/sda3 /mnt/		#mounts as /
+		sudo mkdir /mnt/home
+  		sudo mount /dev/sda4 /mnt/home
+		sudo mkdir /mnt/boot
+ 		sudo mkdir /mnt/boot/efi
+  		sudo mount /dev/sda1 /mnt/boot/efi
 		etc...
 	Install from a rootfs tarball. You may need to install xz to untar first. Connect to wifi to do so.
 		xbps-install xz
-		tar xvf void-x86_64_ROOTFS-20221001.tar.xz -C /mnt
-	Enter the Chroot:
+		sudo tar xvf void-x86_64-ROOTFS-20230628.tar.xz -C /mnt
+	Enter the Chroot:
 		xbps-install -S xtools
-		xchroot /mnt /bin/bash
+		sudo xchroot /mnt /bin/bash
 	Install the base system, and update:
 		xbps-install -Su xbps
 		xbps-install -u
@@ -38,7 +38,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	generate an fstab from current filesystem:
 		cp /proc/mounts /etc/fstab
 		in /etc/fstab, remove lines that refer to proc, sys, devtmpfs, pts and LIVEOS_ROOTFS
-		Replce references to /dev/sdXX, etc with their UUID. YOu can get this by running blkid
+		Replce references to /dev/sdXX, etc with their UUID. You can get this by running blkid
 		change the last zero of the entry for / to 1. And change the last zero of every other line to 2. This changes the behavior of fsck
 		Add an entry to mount /tmp in ram:
 			(in fstab) tmpfs /tmp tmpfs defaults,nosuid,nodev 0 0
@@ -49,21 +49,23 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 			xbps-install -S grub
 			grub-install /dev/sdX (/dev/sdX = drive that you are installing Grub to)
 		UEFI:
-			install grub-x86_64-efi, grub-i386-efi or grub-arm64-efi (depending on architecture)
-			grub-install --target=XXXXXX-efi --efi-directory=/boot/efi --bootloader-id="Void" # Set bootloader ID as you wish
+			xbps-install grub-x86_64-efi, grub-i386-efi or grub-arm64-efi (depending on architecture)
+			grub-install --target=XXXXXX-efi --efi-directory=/boot/efi --bootloader-id="Void" # Set bootloader ID as you wish. for target=, set to architecture. i.e target=x86_64-efi
 			Troubleshooting:
 				If EFI variables are not available, add the option --no-nvram to the grub-install command
-				For installing on removable medai, or noncompliant UEFI systems:
+				For installing on removable media, or noncompliant UEFI systems:
 					try adding the option --removable to grub-install
 					OR copy the installed grup executable into a boot directory you create.
 						mkdir -p /boot/efi/EFI/boot
 						cp /boot/efi/EFI/Void/grubx64.efi /boot/efi/EFI/boot/bootx64.efi #Location of grub executable can be found with efibootmgr
 		ensure all installed packages are configure correctly:
 			xbps-reconfigure -fa
-		exit and reboot:
+		exit the chroot:
 			exit
-			umount -R /mnt
-			shutdown
+		copy /etc/wpa_supplicant/wpa_supplicant.conf to /mnt/etc/wpa_supplicant/wpa_supplicant.conf This makes it so you do not ave to reconfigure your wifi on reboot into newly installed system
+		unmount chroot, shutdown:
+			sudo umount -R /mnt
+			sudo poweroff
 		On reboot, update:
 			xbps-install -Su
 -create new user, add sudo priviledges-
@@ -102,7 +104,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	If you need to create ntfs partitions: 
 		ntfs-3g
 	If Wayland:
-		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock waybar foot mpvpaper swayidle wlopm wcalc
+		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock Waybar foot mpvpaper swayidle wlopm wcalc polkit qt5-wayland
 	If Xorg (Using Nvidia)
 		urxvt dmenu xorg-minimal xorg-fonts wcalc
 	Intel cpu:
@@ -112,7 +114,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 	AMD gpu:
 		Gcn or later AMD gpu:
 			linux-firmware-amd xf86-video-amdgpu
-			Opengl: mesa-dri 
+			Opengl: mesa-dri
 			Vulkan: vulkan-loader mesa-vulkan-radeon
 			Hardware acceleration: mesa-vaapi mesa-vdpau
 			also possibly:
@@ -152,21 +154,27 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 				Make a new section named "ServerFlags" with the line: Option "IgnoreABI" "1"
 				Then, you can run commands with prime-run in front of them, to make them use the nvidia card.
 		Monitoring: install nvtop
-	Intel gpu: (add section on monitoring)
+	Intel gpu:
 		linux-firmware-intel
 		xf86-video-intel
 		Opengl: mesa-dri
 		Vulkan: vulkan-loader mesa-vulkan-intel
 		Hardware acceleration: intel-video-accel
-			Some issues can be solved by turning iommu off in the kernel cmdline
+		Monitoring: intel-gpu-tools run with sudo intel_gpu_top
+			Some issues can be solved by turning iommu off in the kernel cmdline
 	sometimes, pulseaudio is needed, then install:
 		pulseaudio pavucontrol
 	-enabling river-
+		(download river config file, place in ~/.config)
+		enabling dbus and polkit seems necessary
+		add the user to the _seatd group
+			sudo usermod -a -G _seatd void
+		seatd or elogind is needed, seatd seems better
 		ln -s /etc/sv/seatd /var/service
 		create/place ~/.config/river/init , and make executable
 		put this line in /etc/environment
-			XDG_RUNTIME_DIR=/home/void/.config/1000 (1000 = Uid)
-		create ~/.config/1000, chmod 700 it
+			XDG_RUNTIME_DIR='/home/void/.config/1000'
+		create the directory ~/.config/1000, chmod 0700 it
 	to setup sensors:
 		sudo sensors-detect, and default for the options, yes to generate config.
 	other repositories:
@@ -184,12 +192,8 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 		date -s '2023-5-1 18:00:00'
 	-default shell to zsh-
 		chsh -s /bin/zsh
-	-wayland setup-
-		(download river config file)
-		enabling dbus service is necessary
-		is elogind needed? or seatd?
 	-steam-
-		install: void-repo-nonfree void-repo-multilib
+		install: void-repo-nonfree void-repo-multilib/nonfree
 		then install: steam libgcc-32bit libstdc++-32bit libdrm-32bit libglvnd-32bit
 		if using open source gpu driver [amd, intel, nouveau], also install: mesa-dri-32bit
 		if nvidia proprietary, install: nvidia-libs-32bit (or whichever nvidia libs is appropriate)
@@ -323,29 +327,38 @@ waybar should show in a blank screen and automatically hide when you open a wind
 -zram- (what algorithm is best?) (is one per core best?) # smaller size 80% of Ram, so incompressible data does not cause a blowup
 	sudo sh -c 'echo "zram" > /etc/modules-load.d/zram.conf'
 
-	Most people recommend creating one disk per processor core. This is specified as an option when the kernel module is loaded, here's an example for a 4 core system:
+	This is specified as an option when the kernel module is loaded, here's an example for a 12gb ram system system:
 
-	sudo sh -c 'echo "options zram num_devices=4" > /etc/modprobe.d/zram.conf'
+	sudo sh -c 'echo "options zram num_devices=1" > /etc/modprobe.d/zram.conf'
 
-	Now that the number of disks has been set, we must also specify their size. This could be done in /etc/runit/core-services/03-zram.sh or in /etc/rc.local. Add the following lines to either file, adjusted to however many disks you created earlier. The size you select also depends on your system needs and available RAM. This example adds 4GB zram swap to a system.
+	Now that the number of disks has been set, we must also specify their size. This could be done in /etc/runit/core-services/03-zram.sh or in /etc/rc.local. Add the following lines to either file, adjusted to however many disks you created earlier. The size you select also depends on your system needs and available RAM. This example adds 18GB zram swap to a system. algo should usualy be zstd, but lzo-le can be used for weaker cpu and faster compression at a worse ratio, for example in a game server.
 
 	# set sizes for zram drives
-	zramctl --find --size 1G
-	zramctl --find --size 1G
-	zramctl --find --size 1G
-	zramctl --find --size 1G
+	zramctl --find --algorithm zstd --size 18G 
 
 	# make it swap
 	mkswap /dev/zram0
-	mkswap /dev/zram1
-	mkswap /dev/zram2
-	mkswap /dev/zram3
 
 	# activate
 	swapon /dev/zram0
-	swapon /dev/zram1
-	swapon /dev/zram2
-	swapon /dev/zram3
+
+	Then, place these lines in /etc/sysctl.conf:
+		vm.swappiness=200 # max swappiness, so zram is used often in case of need
+
+	If you have a decent amount of ram, add these lines to /etc/sysctl.conf as well:
+		vm.vfs_cache_pressure=50 # low cache pressure - kernel will cache more stuff in ample ram
+		vm.dirty_background_ratio=50 # waits to write it out, increases throughput and performance.
+		vm.dirty_ratio=80 # wait until 80% of ram has dirty pages. increases throughput
+		
+	If you are on a particularily ram starved system, place these in /etc/sysctl.conf as well:
+		vm.vfs_cache_pressure=500 # increases cache pressure, so kernel does not try to cache stuff.
+		vm.dirty_background_ratio=5 # writes dirty pages out of ram to disk right away.
+		vm.dirty_ratio=10 # If dirty pages get to 10% write them out right away
+
+	If you have a regular swap in addition to zram, ensure priority is set higher for the zram device:
+		sudo cat /proc/swaps
+		ensure that the default swap partition and the zram device is present, and that the zram device has a higher priority.
+	Note that htop has a bar to show zram usage
 
 -disabling unneeded services-
 	to disable unneeded services, just remove the symlink in /var/service
