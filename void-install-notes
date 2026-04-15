@@ -12,7 +12,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 		mkswap /dev/sda2
 		mkfs.btrfs /dev/sda3    (etc)
         make sub-directories in /mnt, and mount them there:
-		sudo mount /dev/sda3 /mnt/		#mounts as /
+		sudo mount /dev/sda3 /mnt/
 		sudo mkdir /mnt/home
   		sudo mount /dev/sda4 /mnt/home
 		sudo mkdir /mnt/boot
@@ -29,7 +29,6 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 		xbps-install -Su xbps
 		xbps-install -u
 		xbps-install base-system
-		xbps-remove base-voidstrap
 	Specify the hostname in /etc/hostname
 	Review contents of /etc/rc.conf
 	For Glibc: edit /etc/default/libc-locales uncomment desired locales
@@ -100,50 +99,31 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 -installation- -if you get an error stating Certificate verification failed ERROR: failed to fetch file (XXXXX): Operation not permitted likely the system time is off, and needs to be fixed.-
 		Alternatively, bypass the checks with: export SSL_NO_VERIFY_PEER=1
 	Once connected to the internet, and updated, install: (Try Alsamixer.app, sndio, Pipewire)
-		xz unzip zsh htop firefox-esr mc vim alsa-lib alsa-utils gcc make git wget curl lm_sensors gimp libreoffice zathura Thunderbird keyd mpv most deluge persepolis obs newsboat vagrant task
-	If you need to create ntfs partitions: 
-		ntfs-3g
-	If Wayland:
-		wayland river seatd foot fuzzel wl-clipboard cliphist gammastep swayimg mako kanshi swaylock Waybar foot mpvpaper swayidle wlopm wcalc polkit qt5-wayland
-	If Xorg (Using Nvidia)
-		urxvt dmenu xorg-minimal xorg-fonts wcalc
+		linux-firmware void-repo-nonfree xz unzip zsh htop firefox-esr chromium  mc vim alsa-lib alsa-utils gcc make git wget curl lm_sensors gimp libreoffice zathura thunderbird keyd mpv most deluge persepolis obs newsboat vagrant task ntfs-3g rxvt-unicode dmenu xorg-minimal xorg-fonts wcalc
 	Intel cpu:
-		linux-firmware-intel intel-ucode [nonfree], then regenerate the initramfs. To regenerate initramfs: sudo xbps-reconfigure -f linuxX.XX To find kernel version: sudo xbps-query -l | grep linux		
+		linux-firmware-intel intel-ucode [nonfree], then regenerate the initramfs. To regenerate initramfs: sudo xbps-reconfigure -f linuxX.XX To find kernel version: sudo xbps-query -l | grep linux
 	AMD cpu:
 		linux-firmware-amd
 	AMD gpu:
 		Gcn or later AMD gpu:
-			linux-firmware-amd xf86-video-amdgpu
-			Opengl: mesa-dri
-			Vulkan: vulkan-loader mesa-vulkan-radeon
-			Hardware acceleration: mesa-vaapi mesa-vdpau
-			also possibly:
-				radeontop [a monitoring program]  
-			Note that there are two radeon drivers for vulkan, mesa-vulkan-radeon and amdvlk. mesa-vulkan-radeon is generally better, and amdvlk should usually be avoided, it caused crashes for me. 
-			The proprietary amdgpu-pro drivers should also usually be avoided.
+			linux-firmware-amd xf86-video-amdgpu mesa-dri vulkan-loader mesa-vulkan-radeon mesa-vaapi radeontop
+			Note that there are two radeon drivers for vulkan, mesa-vulkan-radeon and amdvlk. mesa-vulkan-radeon is generally better, and amdvlk should usually be avoided.
 		Terascale or earlier: (see if improve this section)
-			linux-firmware-amd xf86-video-ati
-			Opengl: mesa-dri 
-			Hardware acceleration: mesa-vaapi mesa-vdpau
-			also possibly:
-				radeontop [a monitoring program]
-	Nvidia gpu: [Nvidia Wayland support is in poor shape at this time]
-		The open source nouveau driver [works very poorly on 2nd gen Maxwell and newer [works okish on 750ti, etc]], only opengl, not suggested on Maxwell and newer architectures:
-			xf86-video-nouveau
+			linux-firmware-amd xf86-video-ati mesa-dri mesa-vaapi mesa-vdpau radeontop
+	Nvidia gpu: (The nvk driver may eventually replace the proprietary driver)
+		The open source nouveau driver [works very poorly on 2nd gen Maxwell and newer [works okish on 750ti, etc]], only opengl, not suggested on Maxwell and newer architectures. Best for Tesla and older architecture
+			xf86-video-nouveau nvtop
 			if needed: mesa-dri-32-bit
-			(look into the nvk driver)
 		Nvidia proprietary drivers:
 			Maxwell architecture and newer:
-				nvidia [nonfree]
+				nvidia [nonfree] nvtop
 				if needed: nvidia-libs-32bit [nonfree]
 			Kepler architecture:
-				nvidia470 [nonfree]
+				nvidia470 [nonfree] nvtop 
 				if needed: nvidia470-libs-32bit [nonfree]
 			Fermi architecture:
-				nvidia390 [nonfree]
+				nvidia390 [nonfree] nvtop
 				if needed: nvidia390-libs-32bit [nonfree]
-			Tesla architecture and older:
-				not available in repos, it is suggested to use nouveau
 		Enabling Nvidia Optimus [switchable graphics]
 			Prime Render Offload [available on newest nvidia driver only, best option.]
 				First, create an xorg.conf file: Xorg :1 -configure
@@ -153,36 +133,13 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 				Under the device for the Nvidia GPU, add: Option "AllowEmptyInitialConfiguration"
 				Make a new section named "ServerFlags" with the line: Option "IgnoreABI" "1"
 				Then, you can run commands with prime-run in front of them, to make them use the nvidia card.
-		Monitoring: install nvtop
 	Intel gpu:
-		linux-firmware-intel
-		xf86-video-intel
-		Opengl: mesa-dri
-		Vulkan: vulkan-loader mesa-vulkan-intel
-		Hardware acceleration: intel-video-accel
-		Monitoring: intel-gpu-tools run with sudo intel_gpu_top
+		linux-firmware-intel xf86-video-intel mesa-dri vulkan-loader mesa-vulkan-intel intel-video-accel intel-gpu-tools (run with sudo intel_gpu_top)
 			Some issues can be solved by turning iommu off in the kernel cmdline
 	sometimes, pulseaudio is needed, then install:
 		pulseaudio pavucontrol
-	-enabling river-
-		(download river config file, place in ~/.config)
-		enabling dbus and polkit seems necessary
-		add the user to the _seatd group
-			sudo usermod -a -G _seatd void
-		seatd or elogind is needed, seatd seems better
-		ln -s /etc/sv/seatd /var/service
-		create/place ~/.config/river/init , and make executable
-		put this line in /etc/environment
-			XDG_RUNTIME_DIR='/home/void/.config/1000'
-		create the directory ~/.config/1000, chmod 0700 it
 	to setup sensors:
 		sudo sensors-detect, and default for the options, yes to generate config.
-	other repositories:
-		other repositories exist, they can be installed like any other package, they are:
-		void-repo-nonfree
-		void-repo-multilib
-		void-repo-multilib-nonfree
-		void-repo-debug
 	-timezones-
 		to change the default timezone:
 		rm -rf /etc/localtime
@@ -212,7 +169,7 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 		if old soundcards are removed, they may have entries in /etc/modprobe.d/alsa.conf, which can cause problems. Good idea to remove them if issues.
 -to remove older kernels-
 	sudo vkpurge rm all
--wine gaming general, wineGE-
+-wine gaming general, wineGE- -MOVE THIS SECTION TO ITS OWN PLACE-
 	
 	enabling esync - esync is a thing that removes some overhead and can make games run faster, especially as they are more multithreaded.  guide: https://github.com/lutris/docs/blob/master/HowToEsync.md
 		To check if Esync is enabled -  run the ulimit -Hn command. If the value printed is equal to or greater than 524288, then your system is Esync-compatible.
@@ -283,9 +240,7 @@ waybar should show in a blank screen and automatically hide when you open a wind
 (see about getting an email client)(thunderbird, cmd email clients)
 (investigate if an IRC is needed)
 (add section on time and date control)
-(see if fuzzel can start on a side/in a corner, instead of center. see if you can remove unneeded entries from fuzzel)
 (add section on changing mirrors)
-(cutomize river for ultrawide)
 (add section on video players, etc)
 (add section on image viewers, etc)
 (look into replacing sudo with doas)
@@ -295,8 +250,7 @@ waybar should show in a blank screen and automatically hide when you open a wind
 (see if trim is a good idea for ssds)
 (figure out how to fix usb owned by root)
 (look into sleep and resume on laptops)
-(look into lockscreens, for security)
-(look into wpa_supplicant vs connman)
+(look into lockscreens)
 (add section on printers, cups, etc)
 (add xbps-src section)
 (look at leaking dns servers)
@@ -306,7 +260,7 @@ waybar should show in a blank screen and automatically hide when you open a wind
 (add firefox/librewolf  section)
 	accessibility off is good - supposed to be a memory leak
 -xdeb- (add section on using xdeb to convert .deb to xbps packages)
--to install and compile dwm- (look at doing with xbps-src) (for xorg only)
+-to install and compile dwm- (look at doing with xbps-src)
 	install: libXinerama-devel libXft-devel
 	then download dwm: wget https://dl.suckless.org/dwm/dwm-6.4.tar.gz
 	once unpacked into a different folder, change in config.def.h:
@@ -385,7 +339,7 @@ waybar should show in a blank screen and automatically hide when you open a wind
 	2. use the mullvad config generator page (look at doing through cli), and download the configs, and place them in /etc/wireguard
 	3. to turn it on [example]: wg-quick up mullvad-se4 [the se4 part is different, depending on location] [place this command somewhere where it will be executed on startup]
 	to disconnect: wg-quick down mullvad-se4
--gpu overclocking - amd gcn and later-
+-gpu overclocking - amd gcn and later- -MOVE TO OWN SECTION-
 	the third party guis seem quite buggy, just use cli
 
 	enable amdgpu.ppfeaturemask=0xffffffff in grub boot parameters
