@@ -4,6 +4,16 @@ Various dotfiles and configuration scripts I use
 
 setup feh to work as image preview in mc
 
+figure out how to set defaults for hitting enter on a file in mc
+
+figure out best pdf editing setup
+
+figure out best ebook setup
+
+add empty directories (for skel)
+
+configure zsh
+
 make dotfiles symlinked
 
 configure fvwm
