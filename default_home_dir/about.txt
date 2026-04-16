@@ -1,1 +1,0 @@
-This is the layout for a users default home directory, it needs to be coppied to /etc/skel
