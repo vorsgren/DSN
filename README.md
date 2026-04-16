@@ -2,6 +2,8 @@ Various dotfiles and configuration scripts I use
 
 - todo -
 
+setup feh to work as image preview in mc
+
 make dotfiles symlinked
 
 configure fvwm
