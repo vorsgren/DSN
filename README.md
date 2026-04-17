@@ -26,6 +26,10 @@ set up miracast
 
 set up prime-run properly for things that need it
 
+do decent firewall setup
+
+Setup Waydroid
+
 setup xdg user dirs
 
 configure /etc/skel

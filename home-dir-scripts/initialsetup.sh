@@ -27,3 +27,5 @@ useradd -m void # add ability to set custom user
 sudo sensors detect # give it default safeish scanning options
 
 chsh -s /bin/zsh
+
+# run the symlink dotfiles script
