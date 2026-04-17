@@ -30,6 +30,14 @@ setup xdg user dirs
 
 configure /etc/skel
 
+setup torrent client
+
+setup download manager (surge download manager?)
+
+setup time syncing service, ensure date is correct in setup script
+
+Add cleanup script - script that makes it easy to run vkpurge, xbps-remove -Oo, etc
+
 configure zswap
 
 add bar with status cpu monitor, gpu, ram, battery, vpn
