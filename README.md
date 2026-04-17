@@ -8,9 +8,7 @@ figure out how to set defaults for hitting enter on a file in mc
 
 figure out best pdf editing setup
 
-figure out best ebook setup
-
-add empty directories (for skel)
+figure out best ebook setup (foliate?)
 
 configure zsh
 
@@ -24,17 +22,21 @@ Add osc52 to vim
 
 add any other vim customizations
 
-customize mpvpaper
+set up miracast
 
-set browser to download to ~/dwn
+set up prime-run properly for things that need it
+
+setup xdg user dirs
 
 configure /etc/skel
 
-add battery to bar
-
 configure zswap
 
-add bar with status monitor
+add bar with status cpu monitor, gpu, ram, battery, vpn
+
+Make wifi script enable wpa_supplicant if not enabled, and fix slowness and odd pause issues.
+
+yt-dlp script
 
 add chroot setup script
 
@@ -42,4 +44,16 @@ add script for music player, etc.
 
 add script to run on first boot, adding all files, etc
 
-Likely much much more
+setup vagrant (or something else for quick vms)
+
+setup winboat
+
+add initial Docker setup
+
+vpn setup script
+
+make sure TRIM is setup properly for ssds
+
+Setup screensaver
+
+setup for portable live usb
