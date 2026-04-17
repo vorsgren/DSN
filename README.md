@@ -14,7 +14,7 @@ configure zsh
 
 make dotfiles symlinked
 
-configure fvwm
+configure fvwm (add scratchpads, maybe tdrop for that)
 
 urxvt in daemon mode
 
@@ -46,11 +46,11 @@ Make wifi script enable wpa_supplicant if not enabled, and fix slowness and odd 
 
 yt-dlp script
 
-add chroot setup script
+configure Thunderbird
 
-add script for music player, etc.
+add screenlocking (physlock, slock, i3lock)
 
-add script to run on first boot, adding all files, etc
+add script for music player, etc. (maybe just use mpv)
 
 setup vagrant (or something else for quick vms)
 
