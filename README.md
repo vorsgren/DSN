@@ -30,6 +30,8 @@ do decent firewall setup
 
 Setup Waydroid
 
+Set up file indexing and search
+
 ad virus scanner (clamav, see any other practices)
 
 setup xdg user dirs
