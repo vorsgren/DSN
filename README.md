@@ -3,6 +3,7 @@ Various dotfiles and configuration scripts I use
 - todo -
 Add osc52 to vim
 add any other vim customizations
+setup neovim
 
 setup feh to work as image preview in mc
 figure out how to set defaults for hitting enter on a file in mc
@@ -51,11 +52,15 @@ yt-dlp script
 
 configure Thunderbird
 
+make syncthing start automatically
+
 add screenlocking (physlock, slock, i3lock)
 
 add script for music player, etc. (maybe just use mpv)
 
 setup vagrant (or something else for quick vms)
+
+setup backups
 
 setup winboat
 
@@ -68,3 +73,17 @@ make sure TRIM is setup properly for ssds
 Setup screensaver
 
 setup for portable live usb
+
+try:
+thefuck
+EagleMode
+Port authority
+Upscayl
+Buzz - audio transcription tool
+Frog - copy text from anywhere
+Logseq
+Lm studio
+Appflowy
+Gosuki
+Atuin shell history
+Sqlit - sql tui

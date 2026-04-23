@@ -2,9 +2,11 @@
 
 xbps-install -Su
 
-xbps-install linux-firmware void-repo-nonfree xz unzip zsh htop firefox-esr chromium mc vim alsa-lib alsa-utils gcc make cmake git wget curl lm_sensors gimp libreoffice zathura thunderbird keyd mpv most obs vagrant task ntfs-3g rxvt-unicode dmenu xorg-minimal xorg-fonts wcalc feh pulseaudio pavucontrol
+#setup skel
 
-useradd -m void # add ability to set custom user
+xbps-install linux-firmware void-repo-nonfree xz unzip zsh htop firefox-esr chromium mc vim neovim alsa-lib alsa-utils gcc make cmake git wget curl lm_sensors gimp libreoffice zathura thunderbird keyd mpv most obs vagrant task ntfs-3g rxvt-unicode dmenu xorg-minimal xorg-fonts wcalc feh pulseaudio pavucontrol
+
+useradd -m # add ability to set custom user
 
 # interactive set passwd: passwd (user you just made)
 
@@ -25,6 +27,12 @@ useradd -m void # add ability to set custom user
 # add section that enables optimus automatically if it sees that there are two gpus, especially of different brands with an Nvidia card, i.e. an integrated intel gpu and discrete Nvidia gpu.
 
 sudo sensors detect # give it default safeish scanning options
+
+
+#switch to username you made
+
+
+feh --bg-fill /home/$USER/wallpaper.png
 
 chsh -s /bin/zsh
 
