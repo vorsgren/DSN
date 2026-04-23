@@ -1,9 +1,10 @@
 Various dotfiles and configuration scripts I use
 
 - todo -
+Add osc52 to vim
+add any other vim customizations
 
 setup feh to work as image preview in mc
-
 figure out how to set defaults for hitting enter on a file in mc
 
 figure out best pdf editing setup
@@ -12,15 +13,9 @@ figure out best ebook setup (foliate?)
 
 configure zsh
 
-make dotfiles symlinked
-
 configure fvwm (add scratchpads, maybe tdrop for that)
 
 urxvt in daemon mode
-
-Add osc52 to vim
-
-add any other vim customizations
 
 set up miracast
 

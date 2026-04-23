@@ -1,18 +1,7 @@
 #!/bin/bash
 
-#add part that first creates copies of the directories, and then a second part that makes links to the files
+# copy all folders in the dot folder to the home directory
+find ./dot -type d | cut -c7- | awk 'NF' | xargs -I {} mkdir -p "/home/$USER/{}"
 
-find ./dot -type d | cut 
-
-
-
-#find ./dot | xargs ln -fs /home/$USER
-
-
-
-#shopt -s dotglob
-#for file in ./dot/*; do # make recursive through directories
-	#ln -s "file" /home/$USER 
-	#echo "Linking $file"
-#done
-#shopt -u dotglob
+# symlink all dotfiles to the home directory
+find ./dot -type f | cut -c7- | awk 'NF' | xargs -I {} ln -s -f "/home/$USER/dat/DSN/dot/{}" "/home/$USER/{}"
