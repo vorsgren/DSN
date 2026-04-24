@@ -72,6 +72,8 @@ make sure TRIM is setup properly for ssds
 
 Setup screensaver
 
+Add dafont, including italics
+
 setup for portable live usb
 
 try:
