@@ -68,8 +68,12 @@ DesktopConfiguration global
 #   + M [Action to do on a Mouse Motion]
 ###########
 
+DestroyFunc StartFunction
+AddToFunc   StartFunction
++ I Exec exec xautolock -detectsleep -time 5 -locker "i3lock -c 000000 -u" &
+
 #Screenlocker with Super + l
-Key l A M Exec exec i3lock -c 000000
+Key l A M Exec exec i3lock -c 000000 -u
 
 # Start Function
 #
