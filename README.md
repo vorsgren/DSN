@@ -15,7 +15,7 @@ figure out best ebook setup (foliate?)
 configure zsh
 
 configure fvwm (add scratchpads, maybe tdrop for that)
-add xautolock and i3 lock config, make a shortcut so you can instantly lock, and make it lock after 30 minutes of inactivity. "xautolock -detectsleep -time 30 -locker \"i3lock -c 000000\""
+add xautolock and i3 lock config, and make it lock after 30 minutes of inactivity. "xautolock -detectsleep -time 30 -locker \"i3lock -c 000000\""
 
 urxvt in daemon mode
 

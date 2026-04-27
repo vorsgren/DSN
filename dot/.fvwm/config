@@ -68,6 +68,9 @@ DesktopConfiguration global
 #   + M [Action to do on a Mouse Motion]
 ###########
 
+#Screenlocker with Super + l
+Key l A M Exec exec i3lock -c 000000
+
 # Start Function
 #
 # The start function is run right after fvwm is done reading
