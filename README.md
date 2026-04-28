@@ -28,6 +28,8 @@ Setup Waydroid
 
 Set up file indexing and search
 
+fix xautolock not engaging
+
 ad virus scanner (clamav, see any other practices)
 
 setup xdg user dirs
@@ -49,6 +51,10 @@ add bar with status cpu monitor, gpu, ram, battery, vpn
 Make wifi script enable wpa_supplicant if not enabled, and fix slowness and odd pause issues.
 
 yt-dlp script
+
+Setup/enable services that are normally desired.
+
+setup notifications
 
 configure Thunderbird
 
