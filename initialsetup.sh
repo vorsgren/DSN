@@ -1,8 +1,7 @@
 #!/bin/bash
 
 xbps-install -Su
-
-#setup skel
+cp -a ./skel/. /etc/skel
 
 xbps-install linux-firmware void-repo-nonfree xz unzip zsh htop firefox-esr chromium mc vim neovim alsa-lib alsa-utils gcc make cmake git wget curl lm_sensors gimp libreoffice zathura thunderbird keyd mpv most obs vagrant task ntfs-3g rxvt-unicode dmenu xorg-minimal xorg-fonts wcalc feh pulseaudio pavucontrol i3lock xautolock fvwm3
 

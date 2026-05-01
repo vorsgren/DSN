@@ -1,9 +1,7 @@
 Various dotfiles and configuration scripts I use
 
 - todo -
-Add osc52 to vim
-add any other vim customizations
-setup neovim
+configure neovim
 
 setup feh to work as image preview in mc
 figure out how to set defaults for hitting enter on a file in mc
@@ -33,8 +31,6 @@ fix xautolock not engaging
 ad virus scanner (clamav, see any other practices)
 
 setup xdg user dirs
-
-configure /etc/skel
 
 setup torrent client
 
