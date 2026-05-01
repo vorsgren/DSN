@@ -13,6 +13,14 @@ figure out best ebook setup (foliate?)
 configure zsh
 
 configure fvwm (add scratchpads, maybe tdrop for that)
+configure wallpaper properly in fvwm, instead of using feh
+configure keybinds
+
+configure cups printing, and any nicities, maybe scripts to search for printers.
+
+configure clipboard manager
+
+look at power management, battery management for laptops
 
 urxvt in daemon mode
 
@@ -28,7 +36,7 @@ Set up file indexing and search
 
 fix xautolock not engaging
 
-ad virus scanner (clamav, see any other practices)
+add virus scanner (clamav, see any other practices)
 
 setup xdg user dirs
 
@@ -48,9 +56,11 @@ Make wifi script enable wpa_supplicant if not enabled, and fix slowness and odd 
 
 yt-dlp script
 
-Setup/enable services that are normally desired.
+setup screenshot (scrot?)
 
-setup notifications
+setup notificatiions (dunst)
+
+ensure diskutils are all setup (mkfs.vfat, mkfs.ext4, etc)
 
 configure Thunderbird
 
