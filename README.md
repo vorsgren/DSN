@@ -56,6 +56,9 @@ Make wifi script enable wpa_supplicant if not enabled, and fix slowness and odd 
 
 yt-dlp script
 
+Add fwupd to install
+Add update script - regular updates, and fwupd
+
 setup screenshot (scrot?)
 
 setup notificatiions (dunst)

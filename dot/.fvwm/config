@@ -31,6 +31,11 @@
 # that FvwmConsole uses. Change this to your terminal of choice
 InfoStoreAdd terminal urxvt
 
+# Start stuff fullscreen by default
+#Style * ResizeHintOverride
+#Style * InitialMapCommand Maximize Fullscreen
+#Style "Fvwm*" !InitialMapCommand
+
 # This is used for "Run Command" and the Meta+Space key-binding.
 # runcmd is the binary name and runcmdopt contains additional
 # command line options.
@@ -108,6 +113,7 @@ AddToFunc RaiseMove
 + I Raise
 + M $0
 
+DestroyFunc MoveToCurrent
 DestroyFunc MoveToCurrent
 AddToFunc MoveToCurrent
 + I ThisWindow MoveToPage
@@ -686,7 +692,6 @@ DestroyModuleConfig FvwmPager:*
 # is used as the window list in the panel or taskbar.
 DestroyModuleConfig FvwmIconMan:*
 *FvwmIconMan: UseWinList true
-*FvwmIconMan: ButtonGeometry 120x20
 *FvwmIconMan: ManagerGeometry 1x1
 *FvwmIconMan: Colorset 10
 *FvwmIconMan: FocusColorset 11
