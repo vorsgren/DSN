@@ -73,10 +73,6 @@ DesktopConfiguration global
 #   + M [Action to do on a Mouse Motion]
 ###########
 
-DestroyFunc StartFunction
-AddToFunc   StartFunction
-+ I Exec exec xautolock -detectsleep -time 5 -locker "i3lock -c 000000 -u" &
-
 #Screenlocker with Super + l
 Key l A M Exec exec i3lock -c 000000 -u
 
@@ -92,13 +88,15 @@ AddToFunc   StartFunction
 + I Test (Init) InitBackground
 + I Module FvwmButtons RightPanel
 + I Module FvwmEvent EventNewDesk
++ I Exec exec feh --bg-fill ~/.fvwm/background.png
++ I Exec exec xautolock -detectsleep -time 5 -locker "i3lock -c 000000 -u" &
 
 # Function to set background when fvwm starts
-DestroyFunc InitBackground
-AddToFunc InitBackground
-+ I Test (f $[FVWM_USERDIR]/.BGdefault) \
+#DestroyFunc InitBackground
+#AddToFunc InitBackground
+#+ I Test (f $[FVWM_USERDIR]/.BGdefault) \
     Exec exec fvwm-root $[FVWM_USERDIR]/.BGdefault
-+ I TestRc (NoMatch) Exec exec fvwm-root \
+#+ I TestRc (NoMatch) Exec exec fvwm-root \
     $[FVWM_DATADIR]/default-config/images/background/bg1.png
 
 # Mouse Bindings Functions

@@ -13,7 +13,6 @@ figure out best ebook setup (foliate?)
 configure zsh
 
 configure fvwm (add scratchpads, maybe tdrop for that)
-configure wallpaper properly in fvwm, instead of using feh
 configure keybinds
 
 configure cups printing, and any nicities, maybe scripts to search for printers.
