@@ -30,7 +30,6 @@ InfoStoreAdd terminal urxvt
 # runcmd is the binary name and runcmdopt contains additional command line options.
 InfoStoreAdd runcmd "dmenu_run"
 InfoStoreAdd runcmdopt "-nb '#000000'"
-#InfoStoreAdd runcmdopt "-nb #000000 -nf ddeb1d" WHAT IS THIS FOR
 
 # DesktopConfiguration sets how fvwm handles desktops:
 # * global -- the default. This means all screens show the same desktops/pages.
@@ -238,21 +237,12 @@ Test (x FvwmPrompt) + "&FvwmPrompt%icons/terminal.png%" Exec exec $[infostore.te
 # Generate XDGMenu
 PipeRead "fvwm-menu-desktop -e"
 
-# Programs Menu - This test for some common programs and adds them to the menu. When adding programs you don't need to use the Test (x foo) lines as this is only to help make this menu portable.
 DestroyMenu MenuPrograms
 AddToMenu   MenuPrograms "$[gt.Programs]" Title
-Test (x chromium) + "Chromium" Exec exec chromium
-Test (x firefox) + "Firefox" Exec exec firefox
-Test (x emacs) + "Emacs" Exec exec emacs
-Test (x gimp) + "Gimp" Exec exec gimp
-Test (x vlc) + "VLC" Exec exec vlc
-
-# Background Menu - Backgrounds are located in ~/.fvwm/images/background/ Menu icons are located in ~/.fvwm/images/bgicons/
-DestroyMenu BGMenu
-AddToMenu   BGMenu "$[gt.Wallpapers]" Title
-+ "$[gt.Floral]%bgicons/bg1.png%"  SetBG bg1.png
-+ "$[gt.Circles]%bgicons/bg2.png%" SetBG bg2.png
-+ "$[gt.Space]%bgicons/bg3.png%"   SetBG bg3.png
++ "Chromium" Exec exec chromium
++ "Firefox" Exec exec firefox
++ "Gimp" Exec exec gimp
++ "VLC" Exec exec vlc
 
 # Window Operations Menus
 DestroyMenu MenuWindowOps
@@ -471,12 +461,11 @@ DestroyModuleConfig FvwmScript:*
 # Note - To use the system tray you must have "stalonetray" installed.
 DestroyModuleConfig RightPanel:*
 *RightPanel: Geometry 120x$[monitor.$[monitor.primary].height]-0+0@p
-*RightPanel: Colorset 10
+*RightPanel: Colorset 15
 *RightPanel: Rows $[monitor.$[monitor.primary].height]
 *RightPanel: Columns 120
 *RightPanel: Frame 0
 *RightPanel: Font "xft:Sans:Bold:size=10:antialias=True"
-*RightPanel: (120x45, Icon "fvwm-logo-small.png", Frame 0)
 *RightPanel: (120x5, Frame 0)
 *RightPanel: (10x25, Frame 0)
 *RightPanel: (25x25, Id desk0, Title "0", Action (Mouse 1) GotoDesk 0 0, Colorset 11, ActiveColorset 12, Frame 0)
@@ -488,16 +477,7 @@ DestroyModuleConfig RightPanel:*
 *RightPanel: (110x80, Swallow FvwmPager 'Module FvwmPager *', Frame 0)
 *RightPanel: (5x80, Frame 0)
 *RightPanel: (120x5, Frame 0)
-Test (x stalonetray) *RightPanel: (120x20, Swallow(NoClose,UseOld) \
-    stalonetray 'Exec exec stalonetray --config \
-    "$[FVWM_DATADIR]/default-config/stalonetrayrc"', Frame 0)
-Test (x stalonetray) *RightPanel: (120x$[math.-.$[monitor.$[monitor.primary].height],230], \
-    Top, Swallow FvwmIconMan 'Module FvwmIconMan', Frame 0)
-Test (!x stalonetray) *RightPanel: (120x$[math.-.$[monitor.$[monitor.primary].height],210], \
-    Top, Swallow FvwmIconMan 'Module FvwmIconMan', Frame 0)
-*RightPanel: (120x45, Swallow DateTime 'Module FvwmScript FvwmScript-DateTime',\
-    Frame 0)
-*RightPanel: (120x5, Frame 0)
+*RightPanel: (60x5, Frame 0)
 
 # FvwmPager - This module displays the location of the windows on the various Pages and Desks. This is setup to show only the Pages on the current Desk.
 DestroyModuleConfig FvwmPager:*
@@ -540,9 +520,5 @@ DestroyModuleConfig EventNewDesk:*
 *EventNewDesk: new_desk ChangeDesk
 
 # Local configuration file. For use with the default-config.
-#
-# If $FVWMUSER_DIR/local.config ($HOME/.fvwm/local.config by default)
-# exists, then read it. This allows changes to default-config settings
-# without needing a full copy of the default-config. This will also allow
-# default-config changes to get used after upgrades (if applicable).
+# If $FVWMUSER_DIR/local.config ($HOME/.fvwm/local.config by default) exists, then read it. This allows changes to default-config settings without needing a full copy of the default-config. This will also allow default-config changes to get used after upgrades (if applicable).
 Test (f $[FVWM_USERDIR]/local.config) Read $[FVWM_USERDIR]/local.config
