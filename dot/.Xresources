@@ -38,3 +38,4 @@
 *.color15: #fdf6e3
 
 URxvt.perl-ext-common: 52-osc
+URxvt.scrollBar: false

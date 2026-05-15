@@ -36,7 +36,7 @@ InfoStoreAdd runcmdopt "-nb '#000000'"
 # * per-monitor -- every monitor has its own virtual desktop/pages. For this mode it's recommended that FvwmPager is configured to use the monitor configuration option, so that only windows on that specific monitor are shown.
 # * shared -- the virtual desktops are shared across all monitors and each monitor shows a single desktop at a time. If one monitor switches to a desktop currently being viewed by another, the two monitors swap which desktop they are viewing.  
 #     This is similar to how Xmonad or Herbsflutwm handle desks.  This mode only works with two or more monitors.
-DesktopConfiguration global
+DesktopConfiguration per-monitor
 
 ########## 1: Functions - Fvwm can use custom functions for various tasks. The syntax for defining a function named FunctionName is:
 #   DestroyFunc FunctionName
@@ -57,7 +57,7 @@ AddToFunc   StartFunction
 + I Module FvwmButtons RightPanel
 + I Module FvwmEvent EventNewDesk
 + I Exec exec feh --bg-fill --no-fehbg ~/.fvwm/background.png
-+ I Exec exec xautolock -detectsleep -time 5 -locker "i3lock -c 000000 -u" &
++ I Exec exec xautolock -detectsleep -time 10 -locker "i3lock -c 000000 -u" &
 
 # Mouse Bindings Functions
 DestroyFunc RaiseMoveX
@@ -223,7 +223,7 @@ AddToMenu   MenuFvwmRoot "Fvwm" Titlei
 + "$[gt.XDG &Menu]%icons/apps.png%"     Popup XDGMenu
 + "&XTerm%icons/terminal.png%"          Exec exec $[infostore.terminal]
 Test (x $[infostore.runcmd]) + "R&un Command%icons/run_arrow.png%" Exec exec $[infostore.runcmd] $[infostore.runcmdopt]
-Test (x $[FVWM_MODULEDIR]/FvwmConsole) + "Fvwm&Console%icons/terminal.png%" Module FvwmConsole -terminal $[infostore.terminal]
++ "Fvwm&Console%icons/terminal.png%" Module FvwmConsole -terminal $[infostore.terminal]
 Test (x FvwmPrompt) + "&FvwmPrompt%icons/terminal.png%" Exec exec $[infostore.terminal] -e FvwmPrompt
 + "$[gt.M&an Pages]%icons/help.png%"       Popup MenuFvwmManPages
 + "$[gt.Re&fresh]%icons/refresh.png%" Refresh
@@ -263,17 +263,13 @@ AddToMenu   MenuWindowOpsLong "$[gt.Window Ops]" Title
 + "$[gt.(Un)Sticky]%icons/win/sticky.png%"   Stick
 + "$[gt.(No)Title Bar]%icons/win/title.png%" Pick (CirculateHit) ToggleTitle
 + "$[gt.Send To]%icons/win/sendto.png%"      Popup MenuSendTo
-+ "" Nop
 + "$[gt.Close]%icons/win/close.png%"     Close
 + "$[gt.Destroy]%icons/win/destroy.png%" Destroy
-+ "" Nop
 + "$[gt.Raise]%icons/win/raise.png%" Raise
 + "$[gt.Lower]%icons/win/lower.png%" Lower
-+ "" Nop
 + "$[gt.Stays On Top]%icons/win/top.png%"       Pick (CirculateHit) Layer 0 6
 + "$[gt.Stays Put]%icons/win/stays.png%"        Pick (CirculateHit) Layer 0 4
 + "$[gt.Stays On Bottom]%icons/win/bottom.png%" Pick (CirculateHit) Layer 0 2
-+ "" Nop
 + "$[gt.Identify]%icons/info.png%" Module FvwmIdent
 
 DestroyMenu MenuIconOps
@@ -284,17 +280,13 @@ AddToMenu   MenuIconOps
 + "$[gt.(Un)Sticky]%icons/win/sticky.png%"   Stick
 + "$[gt.(No)TitleBar]%icons/win/title.png%"  Pick (CirculateHit) ToggleTitle
 + "$[gt.Send To]%icons/win/sendto.png%"      Popup MenuSendTo
-+ "" Nop
 + "$[gt.Close]%icons/win/close.png%"     Close
 + "$[gt.Destroy]%icons/win/destroy.png%" Destroy
-+ "" Nop
 + "$[gt.Raise]%icons/win/raise.png%" Raise
 + "$[gt.Lower]%icons/win/lower.png%" Lower
-+ "" Nop
 + "$[gt.Stays On Top]%icons/win/top.png%"       Pick (CirculateHit) Layer 0 6
 + "$[gt.Stays Put]%icons/win/stays.png%"        Pick (CirculateHit) Layer 0 4
 + "$[gt.Stays On Bottom]%icons/win/bottom.png%" Pick (CirculateHit) Layer 0 2
-+ "" Nop
 + "$[gt.Identify]%icons/info.png%" Module FvwmIdent
 
 DestroyMenu MenuSendTo
@@ -319,13 +311,12 @@ AddToMenu   MenuSendToPage
 
 # Fvwm Man Pages (Help) Menu
 DestroyMenu MenuFvwmManPages
-AddToMenu   MenuFvwmManPages "Help" Title
+AddToMenu   MenuFvwmManPages "Man Fvwm" Title
 + "fvwm3"         ViewManPage fvwm3
 + "fvwm3commands" ViewManPage fvwm3commands
 + "fvwm3styles"   ViewManPage fvwm3styles
 + "fvwm3menus"    ViewManPage fvwm3menus
 + "fvwm3all"      ViewManPage fvwm3all
-+ "" Nop
 + "FvwmAnimate"   ViewManPage FvwmAnimate
 + "FvwmAuto"      ViewManPage FvwmAuto
 + "FvwmBacker"    ViewManPage FvwmBacker
@@ -340,7 +331,6 @@ Test (x $[FVWM_MODULEDIR]/FvwmConsole) + "FvwmConsole" ViewManPage FvwmConsole
 Test (x FvwmPrompt) + "FvwmPrompt" ViewManPage FvwmPrompt
 + "FvwmRearrange" ViewManPage FvwmRearrange
 + "FvwmScript"    ViewManPage FvwmScript
-+ "" Nop
 + "fvwm-root"           ViewManPage fvwm-root
 + "fvwm-menu-desktop"   ViewManPage fvwm-menu-desktop
 + "fvwm-menu-directory" ViewManPage fvwm-menu-directory
