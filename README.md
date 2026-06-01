@@ -12,6 +12,8 @@ figure out best ebook setup (foliate?)
 
 configure zsh
 
+Look at limine, other alternative bootloaders
+
 configure fvwm (add scratchpads, maybe tdrop for that)
 configure keybinds
 
@@ -24,6 +26,8 @@ look at power management, battery management for laptops
 urxvt in daemon mode
 
 set up miracast
+
+setup logs
 
 set up prime-run properly for things that need it
 
