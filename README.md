@@ -8,8 +8,6 @@ figure out how to set defaults for hitting enter on a file in mc
 
 figure out best pdf editing setup
 
-figure out best ebook setup (foliate?)
-
 configure zsh
 
 Look at limine, other alternative bootloaders

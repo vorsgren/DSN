@@ -3,7 +3,7 @@
 xbps-install -Su
 cp -a ./skel/. /etc/skel
 
-xbps-install linux-firmware void-repo-nonfree remmina xz unzip zsh htop btop scrot firefox-esr chromium mc vim neovim alsa-lib alsa-utils gcc make cmake git wget curl lm_sensors gimp libreoffice zathura thunderbird keyd mpv vlc most obs vagrant task ntfs-3g rxvt-unicode dmenu xorg-minimal xorg-fonts wcalc feh pulseaudio pavucontrol i3lock xautolock fvwm3 docker kompose kubernetes
+xbps-install linux-firmware void-repo-nonfree remmina xz unzip zsh htop btop scrot firefox-esr chromium foliate mc vim neovim alsa-lib alsa-utils gcc make cmake git wget curl lm_sensors gimp libreoffice zathura thunderbird keyd mpv vlc most obs vagrant task ntfs-3g rxvt-unicode dmenu xorg-minimal xorg-fonts wcalc feh pulseaudio pavucontrol i3lock xautolock fvwm3 docker kompose kubernetes
 
 useradd -m # add ability to set custom user
 
