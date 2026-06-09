@@ -100,3 +100,4 @@ Gosuki
 Atuin shell history
 Sqlit - sql tui
 lightscreen
+stirling pdf
