@@ -74,13 +74,11 @@ make syncthing start automatically
 
 add script for music player, etc. (maybe just use mpv)
 
-setup vagrant (or something else for quick vms)
+setup vagrant (or something else for quick vms) use hardware acceleration.
 
 setup backups
 
 setup winboat
-
-add initial Docker setup
 
 vpn setup script
 
