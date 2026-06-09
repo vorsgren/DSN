@@ -62,8 +62,6 @@ yt-dlp script
 Add fwupd to install
 Add update script - regular updates, and fwupd
 
-setup screenshot (scrot?)
-
 setup notificatiions (dunst)
 
 ensure diskutils are all setup (mkfs.vfat, mkfs.ext4, etc)
@@ -103,3 +101,4 @@ Appflowy
 Gosuki
 Atuin shell history
 Sqlit - sql tui
+lightscreen

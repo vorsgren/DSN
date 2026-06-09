@@ -52,6 +52,8 @@ DesktopConfiguration per-monitor
 
 #Screenlocker with Super + l
 Key l A M Exec exec i3lock -c 000000 -u
+#Screenshot
+Key Print A N Exec exec scrot -s
 
 # Start Function - The start function is run right after fvwm is done reading the config file. This function run after each restart so using Test (Init) or Test (Restart) can further control actions that are run during the first time run (Init) or actions that are run after a restart.
 DestroyFunc StartFunction
