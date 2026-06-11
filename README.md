@@ -6,8 +6,6 @@ configure neovim
 setup feh to work as image preview in mc
 figure out how to set defaults for hitting enter on a file in mc
 
-figure out best pdf editing setup
-
 configure zsh
 
 Look at limine, other alternative bootloaders
@@ -57,7 +55,6 @@ Make wifi script enable wpa_supplicant if not enabled, and fix slowness and odd 
 
 yt-dlp script
 
-Add fwupd to install
 Add update script - regular updates, and fwupd
 
 setup notificatiions (dunst)
