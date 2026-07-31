@@ -1,6 +1,9 @@
 Various dotfiles and configuration scripts I use
 
 - todo -
+
+proper copy paste with system clpibaord in terminal
+
 configure neovim
 
 setup feh to work as image preview in mc
