@@ -2,6 +2,8 @@ Various dotfiles and configuration scripts I use
 
 - todo -
 
+setup ~/bin, add to path
+
 proper copy paste with system clpibaord in terminal
 
 configure neovim
