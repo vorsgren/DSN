@@ -1,0 +1,313 @@
+Nehrim
+
+Oblivion conversion mod - some Oblivion mods may be applicable, check first.
+Engine is notorious for crashing, see about setting up autosaves using full saves (assume same rules as modded Skyrim apply - no quicksaves, only full, no overwriting old saves, ideally no reloading)
+
+Oblivion should support 21:9 resolution, though with harmless glitches in loading screens (which are patched)
+
+Use protontricks/winetricks to install d3dx9_43 libraries
+
+ENBoost is not to be used with Linux - instead look into things that DXVK and wine do. https://github.com/rockerbacon/modorganizer2-linux-installer/issues/177
+	Ensure you set this in the game launch options, so it is large address aware: WINE_FORCE_LARGE_ADDRESS_AWARE=1 %command%
+	Configure dxvk.conf with d3d9.evictManagedOnUnlock
+
+It is said that codecs packs should be removed - caused freezes every minute for someone
+It is said that "Memory Purge" should be turned off, caused crashes when loading new areas
+
+Sound was giving issues (looping bug, no ambient noise)
+------------
+Installation
+------------
+mkdir /home/$USER/Games/Nehrim-wineGE
+WINEPREFIX=/home/$USER/Games/Nehrim-wineGE winecfg
+export WINEPREFIX=/home/$USER/Games/Nehrim-wineGE
+WINEPREFIX=/home/$USER/Games/Nehrim-wineGE winetricks --force d3dcompiler_43 d3dx9_43
+WINEPREFIX=/home/$USER/Games/Nehrim-wineGE wine /home/$USER/Stuff/Games/GoG-installers/Nehrim:AtFate\'sEdge/setup_nehrim_at_fates_edge_1.0.0.0_\(61681\).exe
+Installer runs, do not launch when done.
+WINEPREFIX=/home/$USER/Games/Nehrim-wineGE wine "/home/$USER/location/of/Mo2_Installer/Mod.Organizer-xxxxx.exe"
+Once the installer finishes, uncheck the launch checkbox and close the installer
+Add MO2 to Lutris, choose wine runner. 
+Add  WINE_FORCE_LARGE_ADDRESS_AWARE=1 to the Environment variables
+Launch MO2 - create a portable instance, point it to the Nehrim install location (path of the executables folder) (you may have to enter the path manually)
+Once MO2 is up, go to executables, Oblivion.exe, (it should have the Daedric O character, but say 'Nehrim' next to it in the menu) Force Load Libraries > Configure Libraries. Ensure the checkbox on the line that says Oblivion.exe and obse_1_2_416.dll is checked
+Once this is checked, launching Oblivion.exe will load the obse script extender. Do NOT use obse_loader.exe to start the game
+WINEPREFIX=/home/$USER/Games/Nehrim-wineGE wine "/home/$USER/Games/Nehrim/NehrimMods/Wrye Bash 311 - Installer-2-311-1685294836.exe"
+Then add wrye bash in Mo2. Ensure it loads plugins placed in MO2
+
+Open the TES4edit archive, and copy 'Edit Scripts', 'TES4Edit.exe', and 'TES4EditQuickAutoClean.exe' to the Nehrim Data folder
+Now go to MO2, and add executables for Tes4Edit and Tes4EditQAC, connect them to the proper .exe files
+If TES4Edit is not loading the plugins in MO2, configure it's executable options to start in the main Nehrim folder. 
+If TES4Edit cannot find the .ini, create the 'My Games/Oblivion' folder in your wine c_drive docuemtns folder, and copy the oblivion.ini file from your Nehrim folder over
+
+Install all regular plugins, etc. Sort load order
+[landscape LOD textures - needs manual install, refer to Readme]
+[Easiest to install grass fix manually as well]
+
+Setting dxvk.conf (replace enboost) Take the dxvk.conf file, and place it in the Main game directory (where all the exe's are). Add this line to it: d3d9.evictManagedOnUnlock = True
+
+Unpack BethINI somewhere in the c_drive
+BethINI: WINEPREFIX=/home/$USER/Games/Nehrim-wineGE wine /location/of/BethINI.exe
+Select default,(let it load), Ultra (let it load), recomended tweaks (let it load), then save and exit
+
+Decided not to mess with ENB this time - too much stuff can break, too much messing with stuff
+
+Launch the game from the NehrimLauncher.exe, from in MO2
+
+Set fDlgFocus to 15 in oblivion.ini - disables the dialog zoom
+Autosaves should be off when you disable the three settings in the oblivion.ini
+
+Fix no sound effects:
+Unpack the BSA Extractor somewhere, and run
+WINEPREFIX=/home/$USER/Games/Nehrim-wineGE wine /home/$USER/Games/Nehrim-wineGE/drive_c/BAE/bae.exe
+Drop the "N - Sounds.bsa" into it and extract somewhere. You should have a folder structure like this: sound/fx/ , and in the fx directory should be many folders with sound effects. Copy this sound folder into the Nehrim Data folder - the structure should look like this: ******/drive_c/GOG Games/Nehrim at Fate's Edge GoG/Data/sound/fx/(all manner of sound effect folders)
+
+Ensure that the can't pick up pickaxes/shovel bug is gone.
+
+On game startup:
+	click the menu that asks if you want to go back to default Nehrim settings - choose no.
+	disable autosaves (Simple Saves Plus replaces autosave - implements an automatic regular save feature)
+	configure Simple Saves Plus
+	Character creation Celis
+----Steps to maybe do later------
+
+Once you install Nehrim, install the newest community xOBSE. copy 'obse_1_2_416.dll' and 'Data' (from xOBSE archive) into the Nehrim install folder, overwriting the already present files (not doing now - It seems that the results with the packages OBSE were better, keep in mind to revisit this maybe)
+
+(maybe try ENB in the future)
+ENB may still work on Linux, check and see
+(it sounds like underwater effects should be off with enb - or else they cause a circle of blur on the ground by the player)
+https://www.reddit.com/r/linux_gaming/comments/v2mg3q/i_finally_got_enb_to_work_in_tes4_oblivion/
+https://www.reddit.com/r/oblivionmods/comments/urb8a1/found_success_modding_oblivion_through_proton_up/
+(Use a version of MO2 with LOOT working)
+
+-----------------------------------------
+AAAAA - mods/tools to be installed during setup
+-----------------------------------------
+	MO2 :: a tool for managing mod collections of arbitrary size
+		https://github.com/ModOrganizer2/modorganizer/releases
+	Wrye Bash :: multipurpose mod management and mod installation utility
+		https://www.nexusmods.com/nehrim/mods/2
+	TES4Edit :: Oblivion version of xEdit
+		https://www.nexusmods.com/oblivion/mods/11536
+	dxvk.conf :: conf file for dxvk
+		https://github.com/doitsujin/dxvk/blob/master/dxvk.conf
+	Bethesda Archive Extractor (BSA and BA2) :: Extracts BSA and BA2 archives. Updated for SSE
+		https://www.nexusmods.com/skyrimspecialedition/mods/974
+---------
+Modlist
+---------
+-AI-
+	Nehrim Improvment :: attaches AI packages to NPC's so they will move and perform tasks
+		https://www.nexusmods.com/oblivion/mods/35702
+-Armor, clothing-
+	Arcane Amulet of Light :: let's you create an Arcane Amulet of Light, when equipped it's a continuous light spell leaving both hands free
+		https://www.nexusmods.com/nehrim/mods/40
+	Nehrim Deep Sea Diving Suit :: Changes the Nehrim Deep sea Helm to a full Diving Suit
+		https://www.nexusmods.com/oblivion/mods/35227
+	Chocolate Clothes for Nehrim :: clothes for Nehrim
+		https://www.nexusmods.com/oblivion/mods/41506
+-Graphics-
+	Original Nehrim worldmap :: replaces the new colored world map, with the original one from the standalone version
+		https://www.nexusmods.com/nehrim/mods/5
+	Cazy Hair for Oblivion :: Cazy hair, converted from Sims 3
+		https://www.nexusmods.com/oblivion/mods/45343
+	Maxim Hair Pack Newsea :: hair pack
+		https://www.mediafire.com/file/6bazbd28gtcsnhb/Maxim_Hair_Pack_Newsea.7z
+	Kijiko Hair for Oblivion :: Kijiko hair from Sims 3
+		https://www.nexusmods.com/oblivion/mods/45279
+	ORN - Oaristys' Revamped Nehrim :: A complete overhaul for Nehrim characters and outfits
+		https://www.nexusmods.com/oblivion/mods/45554
+	Better Kobolds :: Tired of the bland and uninteresting look of the Kobolds in Nehrim? This is the mod for you (named Kobold Overhaul)
+		https://www.nexusmods.com/nehrim/mods/7
+	Oblivion Upscaled Textures (OUT) :: Upscaled textures for Oblivion
+		https://www.nexusmods.com/oblivion/mods/49351
+		[use 2x - don't want major discrepancies between nehrim added and oblivion original textures]
+	Nehrim Water Mod :: makes the appearance of the water in Nehrim more realistic
+		https://www.nexusmods.com/oblivion/mods/36545
+	Nehrim Landscape LOD Textures by Xerus :: replaces the default LOD textures of the distant landscapes in Nehrim with better quality textures
+		https://www.nexusmods.com/oblivion/mods/38301
+	Blockhead :: adds support for gender variant head models and textures for NPCs, free camera movement in the race/sex menu, and overriding of: pain-free inventory, per-NPC/Race/scripted body/head texture/model, animation, equipment model
+		https://www.nexusmods.com/oblivion/mods/43752
+	DOWNPOUR - rain retexture :: rain in Cyrodiil is pronounced and heavy at hardly any performance cost
+		https://www.nexusmods.com/oblivion/mods/45520
+	Harvest Flora for Nehrim :: plants now visually change when harvested
+		https://www.nexusmods.com/oblivion/mods/40558
+	Nehrim HiRes Palm Tree Retexture :: replaces all textures of the coconut and date palm trees in Nehrim by high-resolution, more realistic-looking textures
+		https://www.nexusmods.com/oblivion/mods/38081
+	Nehrim Darker Nights :: Makes nights in Nehrim darker
+		https://www.nexusmods.com/oblivion/mods/45175
+	Landscape LOD meshes and normal maps for Nehrim :: High-resolution landscape LOD meshes and normal maps with faked mountain shadows 
+		https://www.nexusmods.com/oblivion/mods/41507
+	Amps Cavern Retexture :: Rework\'s vanilla caves with 2048x2048 textures
+		https://www.nexusmods.com/oblivion/mods/34175
+	Better Nightsky :: replaces the default textures for the two moons
+		https://www.nexusmods.com/oblivion/mods/2234
+	HD Cobwebs :: An HD replacement for the vanilla cobwebs
+		https://www.nexusmods.com/oblivion/mods/50488
+	HiRes Hay Bail Textures :: high resolution hay bail textures to improve quality
+		https://www.nexusmods.com/oblivion/mods/27138
+	HiRes Oblivion Textures :: replaces the oblivion textures with new high resoution versions
+		https://www.nexusmods.com/oblivion/mods/27887
+	IFT Improved Facial Textures :: increases the resolution of all facial textures
+		https://www.nexusmods.com/oblivion/mods/5643
+	Improved Bravil ::  retexture of Bravil with 1024x1024,1024x512 & 1024x256 textures
+		https://www.nexusmods.com/oblivion/mods/10383
+		[two files]
+	Improved Bruma :: retexture of Bruma with 1024x1024 & 1024x512 new textures
+		https://www.nexusmods.com/oblivion/mods/8954
+		[two files]
+	Improved Chorrol :: retexture of Chorrol with 1024x1024 ,1024x512 and 512x512 new textures
+		https://www.nexusmods.com/oblivion/mods/9500/
+		[three files]
+	Improved Fruits Vegetables and Meats :: retexture of several fruits,vegetables,meats & ingredients with 1024x1024,1024x512 & 512x256 textures
+		https://www.nexusmods.com/oblivion/mods/10487
+		[two files]
+	Improved Skulls and Bones and Ironwork :: retextures the skulls, bones, and ironwork
+		https://www.nexusmods.com/oblivion/mods/36075
+	Improved Trees and Flora 2 :: retexture of several trees,flowers,plants and fungus with 1024x1024,1024x512 & 512x512 new texture
+		https://www.nexusmods.com/oblivion/mods/11891
+	Improved Sky Textures :: replaces the original sky textures with improved textures 
+		https://www.nexusmods.com/oblivion/mods/7694/
+	Tamrielic Tapestries- Retexture :: Light vanilla based visual upgrade for all base game tapestries
+		https://www.nexusmods.com/oblivion/mods/53065
+	Improved Trees and Flora :: etexture of several trees, flora, shrubs & fungus
+		https://www.nexusmods.com/oblivion/mods/8500
+	Koldorns Ayleid Ruins Textures :: Ayleid Ruins to look a little more aged and rugged
+		https://www.nexusmods.com/oblivion/mods/8277
+	Koldorns Sewer Textures 2 :: more detailed sewer textures
+		https://www.nexusmods.com/oblivion/mods/9080
+	Landscape retexture :: Landscape retexture in HD 
+		https://www.nexusmods.com/oblivion/mods/44713/
+	Mandrake retexture :: Mandragora retexture
+		https://www.nexusmods.com/oblivion/mods/36024
+	Qarls Texture Pack III Redimized - QTP3 R :: Qarl's Texture Pack 3 Redimized by Qarl, Bomret and dev_akm
+		https://www.nexusmods.com/oblivion/mods/45666
+	Strada Citta Imperiale :: Mod che sostituisce la textures originale della città imperiale
+		https://www.nexusmods.com/oblivion/mods/25123
+	Koldorns Improved Lava 2 ::  changes the Lava to something completely different
+		https://www.nexusmods.com/oblivion/mods/8786
+	SonicEthers Beaming Sunglare :: exture replacer for the Sun of Tamriel that adds Sunglare
+		https://www.nexusmods.com/oblivion/mods/16533
+	
+-Hud-
+	NorthernUI :: A comprehensive UI overhaul for Oblivion, in the style of Skyrim and SkyUI
+		https://www.nexusmods.com/oblivion/mods/48577
+		[use the vanilla style]
+	No Compass - Nehrim :: removes the compass widget from the HUD
+		https://www.nexusmods.com/nehrim/mods/60
+	No GPS - Remove Player Marker on Map - Nehrim :: Hides the player position on the map
+		https://www.nexusmods.com/nehrim/mods/39
+	Black Rectangle Ultrawide Fix :: This is a fix for the loading bug on ultrawide monitors with Oblivion installed
+		https://www.nexusmods.com/oblivion/mods/48351
+-Libraries, bug fixes-
+	SkyBSA :: An OBSE DLL that forces Oblivion to handle BSAs and loose files the same way that Skyrim does
+		https://www.nexusmods.com/oblivion/mods/49568
+	Nehrim - Bug Fixes :: Fixes a lot of translation issues and inconsistencies and some other smaller things
+		https://www.nexusmods.com/nehrim/mods/18
+	Normalized Music for Nehrim :: This mod adjusts the volume of all music to equalize their loudness
+		https://www.nexusmods.com/nehrim/mods/32
+	Unofficial Nehrim Fixes _ English _ German :: Contains various fixes from the german mod Nehrim Expanded and my own observations of the Steam version
+		https://www.nexusmods.com/nehrim/mods/38
+	Irresponsible Horses for Nehrim :: horses in Nehrim have 0 responsibility so they no longer report crimes
+		https://www.nexusmods.com/oblivion/mods/49932
+	Oblivion Display Tweaks :: Micro stutter tick fix, high framerate fix, true FOV fix, alt-tab freeze fix in fullscreen and G-Sync/FreeSync working in borderless/windowed mode
+		https://www.nexusmods.com/oblivion/mods/50348
+	Blue's Engine Fixes :: Currently just fixes one engine bug that would result in memory corruption and a crash
+		https://www.nexusmods.com/oblivion/mods/52700
+	EngineBugFixes :: An OBSE plugin containing bug fixes for the Oblivion game engine
+		https://www.nexusmods.com/oblivion/mods/47085
+	MenuQue - OBSE Plugin :: An OBSE Plugin that adds various additional UI functions , some quest functions and some misc functions
+		https://www.nexusmods.com/oblivion/mods/32200
+	OBL Mod Limit Fix :: This plugin fixes the Oblivion mod limit bug. It allows a maximum of 255 plugins to be loaded
+		https://www.nexusmods.com/oblivion/mods/50066
+	Nehrim - Fix for Helmet of the Mental Destroyer :: Thy2ye Bipedal Flags were set wrong so your head would disappear when wearing the Helmet of the Mental Destroyer - fix
+		https://www.nexusmods.com/oblivion/mods/41519
+	Disappearing Grass Fix for Oblivion and Nehrim :: Disappearing Grass Bugfix Plugin
+		https://www.nexusmods.com/oblivion/mods/35941
+		[Be sure to only install the nehrim one]
+	Nehrim Sneak Fix :: Fixes sneaking in Nehrim
+		https://www.nexusmods.com/oblivion/mods/34773
+	Nehrim Third Person Camera Fix :: Third person camera fix made for Nehrim
+		https://www.nexusmods.com/oblivion/mods/32299
+	Nehrim Creature Idles :: Restores idle animations to Nehrim\'s creatures, fixing a bug in the process
+		https://www.nexusmods.com/oblivion/mods/40045
+-Mechanics-
+	Nehrim Enchanting and Spellmaking Altars :: Adds a spell making and enchanting altar to Tirin Abbey 
+		https://www.nexusmods.com/oblivion/mods/49990
+	Alternative Waiting Options :: Sets different time choices for waiting and sleeping
+		https://www.nexusmods.com/nehrim/mods/20
+	Nehrim Magic Overhaul _ English _ German :: Completely changes the way magic is sold and adds many new spells to have a complete level 1 to level 7 set, but also offers more features
+		https://www.nexusmods.com/nehrim/mods/27
+	Nehrim Better Birthsigns :: Modifies the birthsigns to create a more focused character build
+		https://www.nexusmods.com/nehrim/mods/41
+	NGO - Nehrim Gameplay Overhaul :: complete overhaul of the gameplay mechanics of Nehrim.
+		https://www.nexusmods.com/nehrim/mods/36
+		Fixed NGO text alerts :: Fixes missing text strings present in the Nehrim Gameplay Overhaul
+			https://www.nexusmods.com/nehrim/mods/58
+-Spells-
+	Nehrim - New Runestone Spells :: alters most of the various Runestones to teach spells not found on Spell Vendors
+		https://www.nexusmods.com/oblivion/mods/35326
+-Tweaks-
+	NGO - ORN - UNF Compatibility :: Compatibility patch for Nehrim Gameplay Overhaul // Oaristys' Revamped Nehrim // Unofficial Nehrim Fixes
+		https://www.nexusmods.com/nehrim/mods/53
+	Un-retconning Names and Titles for Nehrim :: renames magic schools, 2 NPCs, 3 Mountain Monastery cells, 4 or 5 items, and some undead mobs
+		https://www.nexusmods.com/nehrim/mods/26
+	Nehrim At Fate's Edge - Updated English Traslation and Mod List :: Translates around two dozen subtitles that were still in German
+		https://www.nexusmods.com/oblivion/mods/52724
+	Nehrim - Complete English Voices from VA and elevenlabs.io :: High-quality English Voices for Nehrim
+		https://www.nexusmods.com/oblivion/mods/52930
+	Nehrim - Fast Roasting :: allows you to roast your meat all at once instead of one by one
+		https://www.nexusmods.com/oblivion/mods/34894
+	Nehrim - Bandage Making :: Make bandages out of bolt of cloths and potions in an immersive way
+		https://www.nexusmods.com/oblivion/mods/47361
+	Stronger gems in Nehrim :: Makes the enchantments on the gems in Nehrim more powerful(not overpowered)
+		https://www.nexusmods.com/oblivion/mods/46135
+	Simple Saves Plus :: automatically creates saves at customisable intervals and when you level up. Replaces the buggy vanilla autosave system
+		https://www.nexusmods.com/oblivion/mods/51122
+-World Changes-
+	Sarnor Enhanced - A Northrealm Expansion :: verhauls the town of Sarnor and the surrounding area by adding 8 new quests, a bunch of new NPCs, new buildings and more
+		https://www.nexusmods.com/nehrim/mods/35
+	Nehrim Living Waters _ ENG _ GER :: Adds almost 500 new spawn points for new fishes in the water
+		https://www.nexusmods.com/nehrim/mods/56
+	Ostian Magic Flying Rocks :: A direct extraction of the magic clouds and crystals popped underneath the flying rocks of Ostian to make them look a bit more mysterious
+		https://www.nexusmods.com/nehrim/mods/45
+	Sanctum Reborn _ English _ German :: This is a direct transfer of a function by a mod called Nehrim Expanded. You can visit the exterior of the Sanctum again, after Barateons attack and you can get a dog
+		https://www.nexusmods.com/nehrim/mods/17
+	Badehausgrotte -nehrim-only- :: Diese mod hier heißt \"Badehausgrotte\", und fügt einen kleinen Dungeon unter dem Badehaus in Erothin hinzu
+		https://www.nexusmods.com/oblivion/mods/40995
+	Nehrim - Ostian Enhanced :: Ostian Enhanced brings new life to the capital of Nehrim's Southrealm
+		https://www.nexusmods.com/oblivion/mods/43632
+-------------------
+Not now maybe later
+-------------------
+	Progress Nehrim ::  general replacement for skill rate adjustment mods. It allows full configuration of skill advancement rates
+		https://www.nexusmods.com/oblivion/mods/38189
+	OBSE :: Oblivion Script Extender
+		https://github.com/llde/xOBSE/releases
+		[need to follow special instructions https://github.com/ModOrganizer2/modorganizer/wiki/Running-Oblivion-OBSE-with-MO2]
+	ENBSeries v0.181 for TES Oblivion :: Enhanced Natural Beauty
+		http://enbdev.com/mod_tesoblivion_v0181.htm
+	UFO News ENB Nehrim :: ENB Preset
+		https://www.nexusmods.com/oblivion/mods/47315
+----------	
+NO
+----------
+	7 demonic weapons -Nehrim- (adds Demons race)
+	Nehrim Character Overhaul (just adds elder scrolls races as playable characters- not want)
+	Hair mods (no need)
+	Oblivion Reloaded Combined (causes crashes on loading certain random cells, no one knows how to configure)
+	Oblivion Stutter Remover (seems to cause issues, leave out)
+	Ultrawide Loading Screen Fix (don't want textures stretched)
+	Real Sleep Extended Nehrim (bugged - not sure how easy it will be to apply to world of Nehrim)
+	Real Lava (needs oblivion.esm)
+	Koldorns Lava (needs oblivion.esm)
+	Improved Fires and flames (needs oblivion.esm)
+	Improved Lava Updated (needs oblivion.esm)
+	Nehrim Burg Darlan Improved (requires some unknown mod - not worth messing with)
+	Portable Campsite (not needed)
+	NVAC (causes more crashes than it solves)
+	Nehrim English Supplemental (outdated)
+	Fast Exit (not needed)
+	Set Bonuses Fixed (NGO - Nehrim Gameplay Overhaul supersedes)
+	NGO - Unofficial Nehrim Fixes (superseeded by NGO - ORN - UNF Compatibility)
+	Nehrim Better Magic Casting (unnecessary)
+	4gb Ram Patcher (dxvk options should make it so it is not needed)
