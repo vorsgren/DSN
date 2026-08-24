@@ -70,10 +70,10 @@ AAAAA - mods/tools to be installed during setup
 		https://www.nexusmods.com/nehrim/mods/2
 	TES4Edit :: Oblivion version of xEdit
 		https://www.nexusmods.com/oblivion/mods/11536
-	dxvk.conf :: conf file for dxvk
-		https://github.com/doitsujin/dxvk/blob/master/dxvk.conf
 	Bethesda Archive Extractor (BSA and BA2) :: Extracts BSA and BA2 archives. Updated for SSE
 		https://www.nexusmods.com/skyrimspecialedition/mods/974
+	BSA Browser :: Extracts BSA files, used for fixing sounds
+		https://github.com/0xra0/BSA-Browser/releases/tag/v1.17.0-linux
 ---------
 Modlist
 ---------
