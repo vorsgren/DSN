@@ -166,6 +166,11 @@ Make sure to boot the installer in uefi mode on newer systems - otherwise grub w
 -to remove older kernels-
 	sudo vkpurge rm all
 -wine gaming general, wineGE- -MOVE THIS SECTION TO ITS OWN PLACE-
+
+	gamescope
+
+	allow gamescope to set it's own niceness
+	sudo setcap 'CAP_SYS_NICE=eip' /usr/bin/gamescope
 	
 	enabling esync - esync is a thing that removes some overhead and can make games run faster, especially as they are more multithreaded.  guide: https://github.com/lutris/docs/blob/master/HowToEsync.md
 		To check if Esync is enabled -  run the ulimit -Hn command. If the value printed is equal to or greater than 524288, then your system is Esync-compatible.

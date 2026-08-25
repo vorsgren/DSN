@@ -5,6 +5,8 @@ cp -a ./skel/. /etc/skel
 
 xbps-install linux-firmware void-repo-nonfree fwupd remmina xz unzip zsh htop btop scrot firefox-esr chromium foliate mc vim neovim alsa-lib alsa-utils gcc make cmake git wget curl lm_sensors gimp inkscape libreoffice pdfarranger pdftk qpdf zathura thunderbird keyd mpv vlc most obs vagrant task ntfs-3g rxvt-unicode dmenu xorg-minimal xorg-fonts wcalc feh pulseaudio pavucontrol i3lock xautolock fvwm3 docker kompose kubernetes innoextract gamescope
 
+sudo setcap 'CAP_SYS_NICE=eip' /usr/bin/gamescope
+
 useradd -m # add ability to set custom user
 
 # interactive set passwd: passwd (user you just made)
