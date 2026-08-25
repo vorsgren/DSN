@@ -1,79 +1,56 @@
-Nehrim
-
-Oblivion conversion mod - some Oblivion mods may be applicable, check first.
-Engine is notorious for crashing, see about setting up autosaves using full saves (assume same rules as modded Skyrim apply - no quicksaves, only full, no overwriting old saves, ideally no reloading)
-
-Oblivion should support 21:9 resolution, though with harmless glitches in loading screens (which are patched)
-
-some people claim that proton9 works better for Oblivion.
-
-ENBoost is not to be used with Linux - instead look into things that DXVK and wine do. https://github.com/rockerbacon/modorganizer2-linux-installer/issues/177
-	Ensure you set this in the game launch options, so it is large address aware: WINE_FORCE_LARGE_ADDRESS_AWARE=1 %command%
-	Configure dxvk.conf with d3d9.evictManagedOnUnlock
-
-It is said that codecs packs should be removed - caused freezes every minute for someone
-It is said that "Memory Purge" should be turned off, caused crashes when loading new areas
-
+__________
+TODO
+---------
+See about setting up autosaves using full saves (assume same rules as modded Skyrim apply - no quicksaves, only full, no overwriting old saves, ideally no reloading). Make a script to do this automatically.
+Investigate tes4edit, especially for cleaning mods
+Add Bashed Patch instructions
+Make a sciript that archives all but the very latest of your savefiles when you start the game.
 ------------
 Installation
 ------------
-Run NehrimSetup.sh
-It installs nehrim, just let the default options run. Do not launch when done.
-Next it installs Wrye Bash, let it run, you will need to install it to another location manually. Install it to the "GOG Games" folder. Uncheck the checkbox to view the notes, and do not launch it.
-Next it installs LOOT - install just for that user, and then let it look for the newest lists online. Uncheck the button to launch it out of the gate.
-Next it opens the bsa unpacker - go to the wineprefix's c drive\gog games\nehrim\data and unpack "N - Sounds.bsa to the Nehrim installation folder. Then close the bsa unpacker. This fixes the sounds not playing. 
+Run NehrimInstall.sh
+It installs Nehrim, Wrye Bash, LOOT, and uses a bsa unpacker to unpack the sound effect bsa to the same folder bsa is in. This fixes the sounds not playing. 
 Folder structure -- ******/drive_c/GOG Games/Nehrim at Fate's Edge GoG/Data/sound/fx/(all manner of sound effect folders)
 
+-----------------------
+NehrimLauncher Settings
+-----------------------
+Graphics to Stability Compromise
+Difficulty to Shadow God
+
+-----------
+.ini tweaks
+-----------
+SIntroSequence=
+SMainMovieIntro=
+bFull Screen=0
+iSize W=1720
+iSizeH=720
+fDlgFocus to 15
 ------------------------------
 Tes4 edit - for cleaning mods
 ------------------------------
 Open the TES4edit archive, and copy 'Edit Scripts', 'TES4Edit.exe', and 'TES4EditQuickAutoClean.exe' to the Nehrim Data folder
-Now go to MO2, and add executables for Tes4Edit and Tes4EditQAC, connect them to the proper .exe files
 If TES4Edit is not loading the plugins in MO2, configure it's executable options to start in the main Nehrim folder. 
-If TES4Edit cannot find the .ini, create the 'My Games/Oblivion' folder in your wine c_drive docuemtns folder, and copy the oblivion.ini file from your Nehrim folder over
+If TES4Edit cannot find the .ini, create the 'My Games/Oblivion' folder in your wine c_drive documents folder, and copy the oblivion.ini file from your Nehrim folder over
 
-Install all regular plugins, etc. Sort load order
+--------------------
+random install notes
+--------------------
+
 [landscape LOD textures - needs manual install, refer to Readme]
 [Easiest to install grass fix manually as well]
 
------------------
-What is this for?
------------------
-Setting dxvk.conf (replace enboost) Take the dxvk.conf file, and place it in the Main game directory (where all the exe's are). Add this line to it: d3d9.evictManagedOnUnlock = True
-
----------------------------------
-Be careful with BethINI on Nehrim
----------------------------------
-Unpack BethINI somewhere in the c_drive
-BethINI: WINEPREFIX=/home/$USER/Games/Nehrim-wineGE wine /location/of/BethINI.exe
-Select default,(let it load), Ultra (let it load), recomended tweaks (let it load), then save and exit
-
-Set fDlgFocus to 15 in oblivion.ini - disables the dialog zoom
-Autosaves should be off when you disable the three settings in the oblivion.ini
-
-On game startup:
-	click the menu that asks if you want to go back to default Nehrim settings - choose no.
-	disable autosaves (Simple Saves Plus replaces autosave - implements an automatic regular save feature)
-	configure Simple Saves Plus
-
-
-(maybe try ENB in the future)
-ENB may still work on Linux, check and see
-(it sounds like underwater effects should be off with enb - or else they cause a circle of blur on the ground by the player)
-https://www.reddit.com/r/linux_gaming/comments/v2mg3q/i_finally_got_enb_to_work_in_tes4_oblivion/
-https://www.reddit.com/r/oblivionmods/comments/urb8a1/found_success_modding_oblivion_through_proton_up/
-
------------------------------------------
-AAAAA - mods/tools to be installed during setup
------------------------------------------
+-------------
+Modding Tools
+-------------
 	Wrye Bash :: multipurpose mod management and mod installation utility
 		https://www.nexusmods.com/nehrim/mods/2
+	LOOT :: Load order sorting utility
+		https://loot.github.io/
 	TES4Edit :: Oblivion version of xEdit
 		https://www.nexusmods.com/oblivion/mods/11536
-	Bethesda Archive Extractor (BSA and BA2) :: Extracts BSA and BA2 archives. Updated for SSE
-		https://www.nexusmods.com/skyrimspecialedition/mods/974
 	BSA Browser :: Extracts BSA files, used for fixing sounds
-		https://github.com/0xra0/BSA-Browser/releases/tag/v1.17.0-linux
 ---------
 Modlist
 ---------
@@ -81,12 +58,8 @@ Modlist
 	Nehrim Improvment :: attaches AI packages to NPC's so they will move and perform tasks
 		https://www.nexusmods.com/oblivion/mods/35702
 -Armor, clothing-
-	Arcane Amulet of Light :: let's you create an Arcane Amulet of Light, when equipped it's a continuous light spell leaving both hands free
-		https://www.nexusmods.com/nehrim/mods/40
 	Nehrim Deep Sea Diving Suit :: Changes the Nehrim Deep sea Helm to a full Diving Suit
 		https://www.nexusmods.com/oblivion/mods/35227
-	Chocolate Clothes for Nehrim :: clothes for Nehrim
-		https://www.nexusmods.com/oblivion/mods/41506
 -Graphics-
 	Original Nehrim worldmap :: replaces the new colored world map, with the original one from the standalone version
 		https://www.nexusmods.com/nehrim/mods/5
@@ -102,12 +75,12 @@ Modlist
 		https://www.nexusmods.com/nehrim/mods/7
 	Oblivion Upscaled Textures (OUT) :: Upscaled textures for Oblivion
 		https://www.nexusmods.com/oblivion/mods/49351
-		[use 2x - don't want major discrepancies between nehrim added and oblivion original textures]
+		[use 2x - don't want major discrepancies between nehrim added and oblivion original textures, or to cause crashes]
 	Nehrim Water Mod :: makes the appearance of the water in Nehrim more realistic
 		https://www.nexusmods.com/oblivion/mods/36545
 	Nehrim Landscape LOD Textures by Xerus :: replaces the default LOD textures of the distant landscapes in Nehrim with better quality textures
 		https://www.nexusmods.com/oblivion/mods/38301
-	Blockhead :: adds support for gender variant head models and textures for NPCs, free camera movement in the race/sex menu, and overriding of: pain-free inventory, per-NPC/Race/scripted body/head texture/model, animation, equipment model
+	Blockhead :: adds gender variant head models textures for NPC, free camera race/sex menu, overrides: pain-free inventory, per-NPC/Race/scripted body/head texture/model, animation, equipment model
 		https://www.nexusmods.com/oblivion/mods/43752
 	DOWNPOUR - rain retexture :: rain in Cyrodiil is pronounced and heavy at hardly any performance cost
 		https://www.nexusmods.com/oblivion/mods/45520
@@ -119,25 +92,12 @@ Modlist
 		https://www.nexusmods.com/oblivion/mods/45175
 	Landscape LOD meshes and normal maps for Nehrim :: High-resolution landscape LOD meshes and normal maps with faked mountain shadows 
 		https://www.nexusmods.com/oblivion/mods/41507
-	Amps Cavern Retexture :: Rework\'s vanilla caves with 2048x2048 textures
-		https://www.nexusmods.com/oblivion/mods/34175
 	Better Nightsky :: replaces the default textures for the two moons
 		https://www.nexusmods.com/oblivion/mods/2234
-	HD Cobwebs :: An HD replacement for the vanilla cobwebs
-		https://www.nexusmods.com/oblivion/mods/50488
-	HiRes Hay Bail Textures :: high resolution hay bail textures to improve quality
-		https://www.nexusmods.com/oblivion/mods/27138
-	IFT Improved Facial Textures :: increases the resolution of all facial textures
-		https://www.nexusmods.com/oblivion/mods/5643
-	Improved Skulls and Bones and Ironwork :: retextures the skulls, bones, and ironwork
-		https://www.nexusmods.com/oblivion/mods/36075
 	Improved Sky Textures :: replaces the original sky textures with improved textures 
 		https://www.nexusmods.com/oblivion/mods/7694/
 	Landscape retexture :: Landscape retexture in HD 
 		https://www.nexusmods.com/oblivion/mods/44713/
-	SonicEthers Beaming Sunglare :: texture replacer for the Sun of Tamriel that adds Sunglare
-		https://www.nexusmods.com/oblivion/mods/16533
-	
 -Hud-
 	NorthernUI :: A comprehensive UI overhaul for Oblivion, in the style of Skyrim and SkyUI
 		https://www.nexusmods.com/oblivion/mods/48577
@@ -223,10 +183,7 @@ Modlist
 -------------------
 Not now maybe later
 -------------------
-	ENBSeries v0.181 for TES Oblivion :: Enhanced Natural Beauty
-		http://enbdev.com/mod_tesoblivion_v0181.htm
-	UFO News ENB Nehrim :: ENB Preset
-		https://www.nexusmods.com/oblivion/mods/47315
+ENBoost - it is great that it allows some assets to be stored outside the 4gb buffer, but afraid it will break some things
 ----------	
 NO
 ----------
@@ -250,4 +207,17 @@ NO
 	Nehrim Better Magic Casting (unnecessary)
 	4gb Ram Patcher (GOG version is already patched with this)
 	xOBSE - xOBSE 22.13 is latest, but causes script errors. xOBSE 22.7 is included in Nehrim
-	OBL Mod Limit Fix :: This plugin allows Oblivion to load more than 512 files total - it is only useful if you have a complicated load order with many BSAs, etc, as you will normally never reach this limit unless you merge many mods.
+	NVAC - New Vegas Anti crash works by taking things that would normally have crashed the game and makes the game keep working with the issue. This can prevent crashes - but causes issues to build up, corrupting files, etc.
+	ENBSeries - just not worth it, any benefits ENBSeries can provide are provided by ENBoost which is better for stability. ORC provides shaders etc.
+	Nehrim Optional Additions - just doesn't provide anything I want
+------------------------
+Random Notes and musings
+------------------------
+Updating xOBSE to the newest version broke some scripts - do not do. GOG Nehrim has a reasonably recent version (xOBSE 22.7)
+It is said that codecs packs should be removed - caused freezes every minute for someone
+It is said that "Memory Purge" should be turned off, caused crashes when loading new areas
+Oblivion should support 21:9 resolution, though with harmless glitches in loading screens (which are patched)
+some people claim that proton9 works better for Oblivion.
+MO2 did not seem to work well. Just using Wrye bash is suggested for Nehrim / Oblivion
+BethINI did not seem to work well - It's settings caused some stuttering, and I seemed to crash entering cells with it on. Also overwrites a bunch of settings that the Nehrim launcher makes in the .ini. Not recommended
+Don't want Lods - they just add extra load to the game.
