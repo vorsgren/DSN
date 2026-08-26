@@ -1,12 +1,13 @@
---------_
+------
 TODO
----------
-See about setting up autosaves using full saves (assume same rules as modded Skyrim apply - no quicksaves only full, no overwriting old saves, ideally no reloading). Use simple saves plus to do this. 
-Make a script that archives all but the very latest of your savefiles when you start the game.
+------
+See about setting up autosaves using full saves (assume same rules as modded Skyrim apply - no quicksaves only full, no overwriting old saves, ideally no reloading). Use simple saves plus to do this?
 Add tes4edit, and mod auto cleaning script
 	Open the TES4edit archive, and copy 'Edit Scripts', 'TES4Edit.exe', and 'TES4EditQuickAutoClean.exe' to the Nehrim Data folder
 	If TES4Edit cannot find the .ini, create the 'My Games/Oblivion' folder in your wine c_drive documents folder, and copy the oblivion.ini file from your Nehrim folder over
 Add Bashed Patch instructions
+Make sure game has LAA patch active, and can use it - make sure wine options allowing it to work.
+Look into Purge Cell Buffer command - worth running all the time?
 ------------
 Installation
 ------------
@@ -19,7 +20,7 @@ NehrimLauncher Settings
 -----------------------
 Graphics to Stability Compromise
 Difficulty to Shadow God
-
+(should already be saved in .ini)
 -----------
 .ini tweaks
 -----------
@@ -29,9 +30,6 @@ bFull Screen=0
 iSize W=1720
 iSizeH=720
 fDlgFocus to 15
-Open the TES4edit archive, and copy 'Edit Scripts', 'TES4Edit.exe', and 'TES4EditQuickAutoClean.exe' to the Nehrim Data folder
-If TES4Edit cannot find the .ini, create the 'My Games/Oblivion' folder in your wine c_drive documents folder, and copy the oblivion.ini file from your Nehrim folder over
-
 --------------------
 random install notes
 --------------------
@@ -49,6 +47,7 @@ Modding Tools
 	TES4Edit :: Oblivion version of xEdit
 		https://www.nexusmods.com/oblivion/mods/11536
 	BSA Browser :: Extracts BSA files, used for fixing sounds
+		https://www.nexusmods.com/skyrimspecialedition/mods/1756i
 ---------
 Modlist
 ---------
@@ -197,7 +196,6 @@ NO
 	Improved Lava Updated (needs oblivion.esm)
 	Nehrim Burg Darlan Improved (requires some unknown mod - not worth messing with)
 	Portable Campsite (not needed)
-	NVAC (causes more crashes than it solves)
 	Nehrim English Supplemental (outdated)
 	Fast Exit (not needed)
 	Set Bonuses Fixed (NGO - Nehrim Gameplay Overhaul supersedes)
@@ -208,6 +206,7 @@ NO
 	NVAC - New Vegas Anti crash works by taking things that would normally have crashed the game and makes the game keep working with the issue. This can prevent crashes - but causes issues to build up, corrupting files, etc.
 	ENBSeries - just not worth it, any benefits ENBSeries can provide are provided by ENBoost which is better for stability. ORC provides shaders etc.
 	Nehrim Optional Additions - just doesn't provide anything I want
+	Streamline - an old optimization mod that is obsolete	
 ------------------------
 Random Notes and musings
 ------------------------

@@ -24,3 +24,6 @@ for file in "$HOME/Nehrim/drive_c/GOG Games/Nehrim At Fate's Edge GOG/Saves"/*; 
 	fi
 done
 shopt -u nullglob # Restore default * behavior
+
+#remove empty archive directories
+find "$HOME/Nehrim/BACKUPSAVES" -empty -type d -delete
