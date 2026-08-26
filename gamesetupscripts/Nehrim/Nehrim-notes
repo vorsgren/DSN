@@ -1,10 +1,12 @@
-__________
+--------_
 TODO
 ---------
-See about setting up autosaves using full saves (assume same rules as modded Skyrim apply - no quicksaves, only full, no overwriting old saves, ideally no reloading). Make a script to do this automatically.
-Investigate tes4edit, especially for cleaning mods
+See about setting up autosaves using full saves (assume same rules as modded Skyrim apply - no quicksaves only full, no overwriting old saves, ideally no reloading). Use simple saves plus to do this. 
+Make a script that archives all but the very latest of your savefiles when you start the game.
+Add tes4edit, and mod auto cleaning script
+	Open the TES4edit archive, and copy 'Edit Scripts', 'TES4Edit.exe', and 'TES4EditQuickAutoClean.exe' to the Nehrim Data folder
+	If TES4Edit cannot find the .ini, create the 'My Games/Oblivion' folder in your wine c_drive documents folder, and copy the oblivion.ini file from your Nehrim folder over
 Add Bashed Patch instructions
-Make a sciript that archives all but the very latest of your savefiles when you start the game.
 ------------
 Installation
 ------------
@@ -27,11 +29,7 @@ bFull Screen=0
 iSize W=1720
 iSizeH=720
 fDlgFocus to 15
-------------------------------
-Tes4 edit - for cleaning mods
-------------------------------
 Open the TES4edit archive, and copy 'Edit Scripts', 'TES4Edit.exe', and 'TES4EditQuickAutoClean.exe' to the Nehrim Data folder
-If TES4Edit is not loading the plugins in MO2, configure it's executable options to start in the main Nehrim folder. 
 If TES4Edit cannot find the .ini, create the 'My Games/Oblivion' folder in your wine c_drive documents folder, and copy the oblivion.ini file from your Nehrim folder over
 
 --------------------
@@ -101,7 +99,7 @@ Modlist
 -Hud-
 	NorthernUI :: A comprehensive UI overhaul for Oblivion, in the style of Skyrim and SkyUI
 		https://www.nexusmods.com/oblivion/mods/48577
-		[use the vanilla style]
+		[use the vanilla style] [disable alchemy enhancements]
 	No Compass - Nehrim :: removes the compass widget from the HUD
 		https://www.nexusmods.com/nehrim/mods/60
 	No GPS - Remove Player Marker on Map - Nehrim :: Hides the player position on the map
