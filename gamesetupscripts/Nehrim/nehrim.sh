@@ -6,8 +6,8 @@ export WINEPREFIX="$HOME/Nehrim"
 export STORE=gog
 
 cd "$HOME/Nehrim/drive_c/GOG Games/Nehrim At Fate's Edge GOG"
-sh -c 'gamescope --backend sdl -w 1720 -h 720 -W3440 -H 1440 -F fsr --fsr-sharpness 2 -f --force-windows-fullscreen --force-grab-cursor -r 72 -- umu-run "obse_loader.exe"; exit 0' 
-#gamescope --backend sdl -w 1720 -h 720 -W3440 -H 1440 -F fsr --fsr-sharpness 2 -f --force-windows-fullscreen --force-grab-cursor -r 72 -- umu-run "obse_loader.exe"
+
+sh -c 'gamescope --backend sdl -w 1720 -h 720 -W 3440 -H 1440 -F fsr --fsr-sharpness 2 -f --force-windows-fullscreen -r 60 -- umu-run "obse_loader.exe"; exit 0'
 
 #archive saves
 archivetime=$(date +"%Y-%m-%d_%H:%M:%S")

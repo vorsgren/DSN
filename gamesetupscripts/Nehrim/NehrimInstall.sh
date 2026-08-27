@@ -26,5 +26,3 @@ umu-run winetricks win7
 
 #copy nehrim launcher to home
 cp -f nehrim.sh $HOME
-
-echo "finished!"

@@ -2,19 +2,13 @@
 TODO
 ------
 See about setting up autosaves using full saves (assume same rules as modded Skyrim apply - no quicksaves only full, no overwriting old saves, ideally no reloading). Use simple saves plus to do this?
-Add tes4edit, and mod auto cleaning script
-	Open the TES4edit archive, and copy 'Edit Scripts', 'TES4Edit.exe', and 'TES4EditQuickAutoClean.exe' to the Nehrim Data folder
-	If TES4Edit cannot find the .ini, create the 'My Games/Oblivion' folder in your wine c_drive documents folder, and copy the oblivion.ini file from your Nehrim folder over
 Add Bashed Patch instructions
-Make sure game has LAA patch active, and can use it - make sure wine options allowing it to work.
-Look into Purge Cell Buffer command - worth running all the time?
+Check log for script error spam - from newer xobse being installed? Check all logs, message logger
 ------------
 Installation
 ------------
 Run NehrimInstall.sh
-It installs Nehrim, Wrye Bash, LOOT, and uses a bsa unpacker to unpack the sound effect bsa to the same folder bsa is in. This fixes the sounds not playing. 
-Folder structure -- ******/drive_c/GOG Games/Nehrim at Fate's Edge GoG/Data/sound/fx/(all manner of sound effect folders)
-
+It installs Nehrim, Wrye Bash, LOOT, xEdit, and uses a bsa unpacker to unpack the sound effect bsa to the data folder. This fixes the sounds not playing. 
 -----------------------
 NehrimLauncher Settings
 -----------------------
@@ -29,14 +23,12 @@ SMainMovieIntro=
 bFull Screen=0
 iSize W=1720
 iSizeH=720
-fDlgFocus to 15
+fDlgFocus=15
 --------------------
 random install notes
 --------------------
-
 [landscape LOD textures - needs manual install, refer to Readme]
-[Easiest to install grass fix manually as well]
-
+[Easiest to install grass fix manually]
 -------------
 Modding Tools
 -------------
@@ -181,9 +173,16 @@ Modlist
 Not now maybe later
 -------------------
 ENBoost - it is great that it allows some assets to be stored outside the 4gb buffer, but afraid it will break some things
+pcb - command, run automatically. Useful if you are running out of ram - unloads cells that you are not currently in. However this makes you keep reloading stuff when you enter new areas, which cancause hitches, crashes. Good idea if tight on Ram, though I'd try ENBoost first
+iNumHWThreads=2 - this is an undocumented .ini setting people try, it seems that adding this line and setting to 1 or 2 can sometimes help with CTD, variable though
+bUseThreadedAI=1 enabling Threaded AI seems to help in some cases
+iNumHavokThreads=3 - defaults to 1, 3 is commonly used, with higher being a mixed bag. Multithreads physics? maybe.
+bUseBackgroundFileLoader=1 - not sure what this does, but sounds like mixed bag.SOmetimes helps, sometimes causes crashes.
+bUseThreadedBlood=1 bUseThreadedMorpher=1 bUseThreadedTempEffects=1 bUseThreadedParticleSystem=1 bUseBackgroundPathing=1 iThreads=10 (default 3) bDebugfaceGenMultithreading=1 bUseMultiThreadedTrees=1 bUseMultiThreadedFaceGen=1 --- More multithreading related ini settings, no one seems to know what they do.
 ----------	
 NO
 ----------
+	Reshade - just not worth it, adds extra vram, overhead, etc.	
 	Progress Nehrim (allows tweaking of leveling, default is fine.)
 	7 demonic weapons -Nehrim- (adds Demons race)
 	Nehrim Character Overhaul (just adds elder scrolls races as playable characters- not want)
@@ -218,3 +217,11 @@ some people claim that proton9 works better for Oblivion.
 MO2 did not seem to work well. Just using Wrye bash is suggested for Nehrim / Oblivion
 BethINI did not seem to work well - It's settings caused some stuttering, and I seemed to crash entering cells with it on. Also overwrites a bunch of settings that the Nehrim launcher makes in the .ini. Not recommended
 Don't want Lods - they just add extra load to the game.
+----------------------
+TWEAKS I HAVE DONE
+----------------------
+running at 1/4 resolution - Oblivion does not like running at higher than 1080p, so run it at a lower resolution and upscale.
+Automatically removing all the older saves from the save folder after done with game session.
+Oblivion Engine seems to like running in Windowed more. 
+
+
