@@ -7,8 +7,7 @@ export STORE=gog
 
 cd "$HOME/Nehrim/drive_c/Modding/MO2"
 
-sh -c 'gamescope --backend sdl -w 1720 -h 720 -W 3440 -H 1440 -F fsr --fsr-sharpness 2 -f --force-windows-fullscreen -r 60 -- umu-run "ModOrganizer.exe" 'moshortcut://Nehrim;' exit 0'
-#sh -c 'gamescope --backend sdl -w 1720 -h 720 -W 3440 -H 1440 -F fsr --fsr-sharpness 2 -f --force-windows-fullscreen -r 60 -- umu-run "obse_loader.exe"; exit 0'
+sh -c 'gamescope --backend sdl -w 1720 -h 720 -W 3440 -H 1440 -F fsr --fsr-sharpness 2 -f --force-windows-fullscreen -r 60 -- umu-run "ModOrganizer.exe"; exit 0'
 
 #archive saves
 archivetime=$(date +"%Y-%m-%d_%H:%M:%S")
